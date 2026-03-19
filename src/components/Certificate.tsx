@@ -431,7 +431,7 @@ const Certificate = forwardRef<HTMLDivElement, CertificateProps>(
                Maharashtra State Board Of Secondary
               </div>
               <div style={{
-                fontSize:'17px',
+                fontSize:'18px',
                 fontWeight:'800',
                 color:'#0d9488',
                 margin:'0 0 4px 0',
@@ -440,7 +440,7 @@ const Certificate = forwardRef<HTMLDivElement, CertificateProps>(
                 fontFamily:"'Cinzel', serif",
                 textTransform:'uppercase',
               }}>
-                and Higher Secondary Education
+                and Higher Education
               </div>
               <div style={{
                 fontSize:'14.5px',
