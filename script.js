@@ -119,7 +119,7 @@ function applyEnglishContent() {
             
             const certificateElement = document.getElementById('certificate');
             
-            // Generate A4 landscape PDF (297mm x 210mm / 29.7cm x 21cm)
+            // Generate A4 portrait PDF (210mm x 297mm / 21cm x 29.7cm)
             const options = {
                 margin: [0, 0, 0, 0],
                 filename: fileName,
@@ -128,11 +128,11 @@ function applyEnglishContent() {
                     scale: 3,
                     useCORS: true,
                     logging: false,
-                    windowWidth: 1600,
-                    windowHeight: 1200
+                    windowWidth: 1200,
+                    windowHeight: 1800
                 },
                 jsPDF: {
-                    orientation: 'landscape',
+                    orientation: 'portrait',
                     unit: 'mm',
                     format: 'a4',
                     compress: true
@@ -148,9 +148,9 @@ function applyEnglishContent() {
             exportHost.style.position = 'fixed';
             exportHost.style.left = '-10000px';
             exportHost.style.top = '0';
-            exportHost.style.width = '297mm';
-            exportHost.style.height = '210mm';
-            exportHost.style.overflow = 'hidden';
+            exportHost.style.width = '210mm';
+            exportHost.style.height = '297mm';
+            exportHost.style.overflow = 'visible';
             exportHost.appendChild(clonedElement);
             document.body.appendChild(exportHost);
             
