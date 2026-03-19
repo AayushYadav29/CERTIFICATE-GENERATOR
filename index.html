@@ -249,6 +249,21 @@
             position: relative;
             display: inline-block;
             padding: 0 30px;
+            line-height: 1.4;
+        }
+
+        /* Hindi and Marathi Typography */
+        .certificate-title h2[data-lang="hindi"],
+        .certificate-title h2[data-lang="marathi"] {
+            font-family: 'Segoe UI', 'Noto Sans Devanagari', sans-serif;
+            text-transform: none;
+            letter-spacing: 1px;
+            font-size: 34px;
+            font-weight: 700;
+            line-height: 1.8;
+            max-width: 65%;
+            word-wrap: break-word;
+            word-break: break-word;
         }
 
         .certificate-title h2::before,
@@ -259,6 +274,14 @@
             transform: translateY(-50%);
             color: #20B2AA;
             font-size: 20px;
+        }
+
+        .certificate-title h2[data-lang="hindi"]::before,
+        .certificate-title h2[data-lang="hindi"]::after,
+        .certificate-title h2[data-lang="marathi"]::before,
+        .certificate-title h2[data-lang="marathi"]::after {
+            content: '✦';
+            font-size: 18px;
         }
 
         .certificate-title h2::before {
@@ -276,8 +299,22 @@
             text-transform: uppercase;
             letter-spacing: 2px;
             position: relative;
-            display: inline-block;
+            display: block;
             padding: 0 40px;
+            font-family: 'Arial', sans-serif;
+            margin-top: 12px;
+        }
+
+        /* Hindi and Marathi Subtitle */
+        .certificate-title .subtitle[data-lang="hindi"],
+        .certificate-title .subtitle[data-lang="marathi"] {
+            font-family: 'Segoe UI', 'Noto Sans Devanagari', sans-serif;
+            text-transform: none;
+            letter-spacing: 1px;
+            font-size: 15px;
+            display: block;
+            margin-top: 12px;
+            width: 100%;
         }
 
         .certificate-title .subtitle::before,
@@ -296,6 +333,13 @@
 
         .certificate-title .subtitle::after {
             right: 0;
+        }
+
+        .certificate-title .subtitle[data-lang="hindi"]::before,
+        .certificate-title .subtitle[data-lang="marathi"]::before,
+        .certificate-title .subtitle[data-lang="hindi"]::after,
+        .certificate-title .subtitle[data-lang="marathi"]::after {
+            content: none;
         }
 
         /* Certificate Body */
@@ -660,6 +704,14 @@
                 padding: 0 14px;
             }
 
+            .certificate-title h2[data-lang="hindi"],
+            .certificate-title h2[data-lang="marathi"] {
+                max-width: 95%;
+                font-size: 13px;
+                letter-spacing: 0.8px;
+                line-height: 1.7;
+            }
+
             .certificate-title h2::before,
             .certificate-title h2::after {
                 font-size: 10px;
@@ -669,6 +721,13 @@
                 font-size: 8px;
                 letter-spacing: 0.8px;
                 padding: 0 22px;
+            }
+
+            .certificate-title .subtitle[data-lang="hindi"],
+            .certificate-title .subtitle[data-lang="marathi"] {
+                display: block;
+                margin-top: 6px;
+                font-size: 8px;
             }
 
             .certificate-title .subtitle::before,
@@ -799,9 +858,24 @@
                 padding: 0 10px;
             }
 
+            .certificate-title h2[data-lang="hindi"],
+            .certificate-title h2[data-lang="marathi"] {
+                max-width: 100%;
+                font-size: 11px;
+                line-height: 1.6;
+                letter-spacing: 0.4px;
+            }
+
             .certificate-title .subtitle {
                 font-size: 7px;
                 padding: 0 16px;
+            }
+
+            .certificate-title .subtitle[data-lang="hindi"],
+            .certificate-title .subtitle[data-lang="marathi"] {
+                display: block;
+                margin-top: 5px;
+                font-size: 7px;
             }
 
             .presented-to {
@@ -860,6 +934,44 @@
             border-radius: 5px;
             padding: 5px;
         }
+
+        .language-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        .language-selector label {
+            font-weight: 600;
+            color: #555;
+            margin: 0;
+        }
+
+        .language-selector select {
+            padding: 10px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+
+        .language-selector select:focus {
+            outline: none;
+            border-color: #008B8B;
+        }
+
+        @media screen and (max-width: 768px) {
+            .language-selector {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .language-selector select {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -871,6 +983,15 @@
                 <div class="form-group">
                     <label for="staffName">Staff Member's Full Name *</label>
                     <input type="text" id="staffName" required placeholder="Enter name" style="font-size: 16px; padding: 15px;">
+                </div>
+
+                <div class="language-selector">
+                    <label for="language">Certificate Language:</label>
+                    <select id="language">
+                        <option value="english">English</option>
+                        <option value="hindi">हिंदी (Hindi)</option>
+                        <option value="marathi">मराठी (Marathi)</option>
+                    </select>
                 </div>
 
                 <div class="form-row">
@@ -899,23 +1020,23 @@
                         <div class="certificate-header">
                             <img src="logo1.png" alt="Left Logo" class="logo">
                             <div class="header-text">
-                                <h1>M. S. Board Of Secondary And Higher Secondary Education,</h1>
-                                <p>Mumbai Divisional Board, Vashi, Navi Mumbai-400 703.</p>
+                                <h1 id="headerLine1">M. S. Board Of Secondary And Higher Secondary Education,</h1>
+                                <p id="headerLine2">Mumbai Divisional Board, Vashi, Navi Mumbai-400 703.</p>
                             </div>
                             <img src="logo.png" alt="Right Logo" class="logo">
                         </div>
 
                         <!-- Certificate Title -->
                         <div class="certificate-title">
-                            <h2>CERTIFICATE OF APPRECIATION</h2>
-                            <div class="subtitle">Proudly Presented To</div>
+                            <h2 id="certTitle" data-lang="english">CERTIFICATE OF APPRECIATION</h2>
+                            <div class="subtitle" id="presentedTo" data-lang="english">Proudly Presented To</div>
                         </div>
 
                         <!-- Certificate Body -->
                         <div class="certificate-body">
                             <div class="teacher-name" id="certStaffName">Staff Name</div>
 
-                            <div class="recognition-text">
+                            <div class="recognition-text" id="recognitionText">
                                 Presented with sincere appreciation for your dedicated contribution to the successful conduct of the <strong>SSC 2026</strong> Examination. Your responsible supervision, discipline and commitment helped ensure smooth operations and uphold examination integrity.
                             </div>
                         </div>
@@ -926,7 +1047,7 @@
                                 <div class="date-box">
                                     <div class="date-value" id="certDate">March 19, 2026</div>
                                     <div class="date-line"></div>
-                                    <div class="date-label">Date</div>
+                                    <div class="date-label" id="dateLabel">Date</div>
                                 </div>
                             </div>
                             <div class="footer-right">
@@ -934,7 +1055,7 @@
                                     <img src="Yadav Sir Sign.png" alt="Principal Signature" class="signature-img">
                                     <div class="signature-line"></div>
                                     <div class="principal-name" id="certPrincipalName">Mr. Dinesh Dayaram Yadav</div>
-                                    <div class="principal-title">Chief Conductor</div>
+                                    <div class="principal-title" id="principalTitle">Chief Conductor</div>
                                 </div>
                             </div>
                         </div>
@@ -950,8 +1071,58 @@
     </div>
 
     <script>
+        // Translation Data
+        const translations = {
+            english: {
+                headerLine1: "M. S. Board Of Secondary And Higher Secondary Education,",
+                headerLine2: "Mumbai Divisional Board, Vashi, Navi Mumbai-400 703.",
+                certTitle: "CERTIFICATE OF APPRECIATION",
+                presentedTo: "Proudly Presented To",
+                recognitionText: "This certificate is proudly presented to you for your valuable support and hard work in making the <strong>SSC 2026</strong> Examination successful. Your honest efforts, discipline and dedication have made an excellent contribution.",
+                dateLabel: "Date",
+                principalTitle: "Chief Conductor"
+            },
+            hindi: {
+                headerLine1: "महाराष्ट्र माध्यमिक और उच्च माध्यमिक शिक्षा बोर्ड,",
+                headerLine2: "मुंबई विभागीय बोर्ड, वाशी, नवी मुंबई-400 703.",
+                certTitle: "प्रशंसा प्रमाणपत्र",
+                presentedTo: "गर्व से प्रस्तुत किया गया",
+                recognitionText: "यह प्रमाणपत्र आपको <strong>SSC 2026</strong> परीक्षा को सफल बनाने में आपके मेहनत और योगदान के लिए दिया जा रहा है। आपके ईमानदार काम, अनुशासन और समर्पण ने हमें बहुत मदद दी है।",
+                dateLabel: "दिनांक",
+                principalTitle: "मुख्य संचालक"
+            },
+            marathi: {
+                headerLine1: "महाराष्ट्र माध्यमिक आणि उच्च माध्यमिक शिक्षा मंडळ,",
+                headerLine2: "मुंबई विभाग मंडळ, वाशी, नवी मुंबई-400 703.",
+                certTitle: "प्रशंसापत्र",
+                presentedTo: "गर्वाने सादर केले जात आहे",
+                recognitionText: "हे प्रशंसापत्र आपल्याला <strong>SSC 2026</strong> परीक्षेला यशस्वी बनविण्यासाठी आपली मेहनत आणि योगदानाविषयी दिले जाते. आपले ईमानदार काम, अनुशासन आणि समर्पण यांनी आमला खूप मदत केली.",
+                dateLabel: "दिनांक",
+                principalTitle: "मुख्य संचालक"
+            }
+        };
+
+        // Function to update certificate language
+        function updateCertificateLanguage(language) {
+            const trans = translations[language];
+            document.getElementById('headerLine1').textContent = trans.headerLine1;
+            document.getElementById('headerLine2').textContent = trans.headerLine2;
+            document.getElementById('certTitle').textContent = trans.certTitle;
+            document.getElementById('certTitle').setAttribute('data-lang', language);
+            document.getElementById('presentedTo').textContent = trans.presentedTo;
+            document.getElementById('presentedTo').setAttribute('data-lang', language);
+            document.getElementById('recognitionText').innerHTML = trans.recognitionText;
+            document.getElementById('dateLabel').textContent = trans.dateLabel;
+            document.getElementById('principalTitle').textContent = trans.principalTitle;
+        }
+
         // Set today's date as default
         document.getElementById('dateIssued').valueAsDate = new Date();
+
+        // Language selector event listener
+        document.getElementById('language').addEventListener('change', function(e) {
+            updateCertificateLanguage(e.target.value);
+        });
 
         // Handle form submission
         document.getElementById('certificateForm').addEventListener('submit', function(e) {
@@ -978,6 +1149,10 @@
             if (principalName) {
                 document.getElementById('certPrincipalName').textContent = principalName;
             }
+
+            // Update certificate language before showing
+            const selectedLanguage = document.getElementById('language').value;
+            updateCertificateLanguage(selectedLanguage);
 
             // Show certificate, hide form
             document.getElementById('formSection').style.display = 'none';
