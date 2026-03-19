@@ -973,6 +973,7 @@
             }
         }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -1078,7 +1079,7 @@
                 headerLine2: "Mumbai Divisional Board, Vashi, Navi Mumbai-400 703.",
                 certTitle: "CERTIFICATE OF APPRECIATION",
                 presentedTo: "Proudly Presented To",
-                recognitionText: "This certificate is proudly presented to you for your valuable support and hard work in making the <strong>SSC 2026</strong> Examination successful. Your honest efforts, discipline and dedication have made an excellent contribution.",
+                recognitionText: "This certificate is presented to you for your valuable contribution and dedicated efforts in the successful conduct of the Secondary School Certificate Examination, February–March 2026, organized by the Maharashtra State Board at St. Agrasen High School (Centre No. 611). Your diligence, discipline, and commitment are highly commendable.",
                 dateLabel: "Date",
                 principalTitle: "Chief Conductor"
             },
@@ -1087,7 +1088,7 @@
                 headerLine2: "मुंबई विभागीय बोर्ड, वाशी, नवी मुंबई-400 703.",
                 certTitle: "प्रशंसा प्रमाणपत्र",
                 presentedTo: "गर्व से प्रस्तुत किया गया",
-                recognitionText: "यह प्रमाणपत्र आपको <strong>SSC 2026</strong> परीक्षा को सफल बनाने में आपके मेहनत और योगदान के लिए दिया जा रहा है। आपके ईमानदार काम, अनुशासन और समर्पण ने हमें बहुत मदद दी है।",
+                recognitionText: "यह प्रमाणपत्र आपको सेंट अग्रसेन हाई स्कूल (केंद्र क्रमांक ६११) द्वारा महाराष्ट्र राज्य बोर्ड की आयोजित माध्यमिक शालांत प्रमाणपत्र परीक्षा फरवरी–मार्च २०२६ के सफल संचालन में आपके महत्वपूर्ण योगदान एवं समर्पित प्रयासों के लिए प्रदान किया जाता है। आपकी लगन, अनुशासन एवं निष्ठा सराहनीय है।",
                 dateLabel: "दिनांक",
                 principalTitle: "मुख्य संचालक"
             },
@@ -1096,7 +1097,7 @@
                 headerLine2: "मुंबई विभाग मंडळ, वाशी, नवी मुंबई-400 703.",
                 certTitle: "प्रशंसापत्र",
                 presentedTo: "गर्वाने सादर केले जात आहे",
-                recognitionText: "हे प्रशंसापत्र आपल्याला <strong>SSC 2026</strong> परीक्षेला यशस्वी बनविण्यासाठी आपली मेहनत आणि योगदानाविषयी दिले जाते. आपले ईमानदार काम, अनुशासन आणि समर्पण यांनी आमला खूप मदत केली.",
+                recognitionText: "हा प्रमाणपत्र आपणांना सेंट अग्रसेन हायस्कूल (केंद्र क्रमांक ६११) येथे महाराष्ट्र राज्य मंडळाद्वारा आयोजित माध्यमिक शालांत प्रमाणपत्र परीक्षा फेब्रुवारी–मार्च २०२६ च्या यशस्वी आयोजनात केलेल्या आपल्या मोलाच्या योगदान व समर्पित प्रयत्नांबद्दल प्रदान करण्यात येत आहे। आपली मेहनत, शिस्त व निष्ठा कौतुकास्पद आहे।",
                 dateLabel: "दिनांक",
                 principalTitle: "मुख्य संचालक"
             }
@@ -1169,7 +1170,42 @@
         }
 
         function printCertificate() {
-            window.print();
+            // Check if device is mobile
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            
+            if (isMobile) {
+                // For mobile devices, download PDF
+                downloadCertificate();
+            } else {
+                // For desktop, open print dialog
+                window.print();
+            }
+        }
+
+        function downloadCertificate() {
+            const staffName = document.getElementById('certStaffName').textContent;
+            const sanitizedName = staffName.replace(/[^a-zA-Z0-9\s]/g, '').trim();
+            const fileName = `Certificate_${sanitizedName}_${new Date().getTime()}.pdf`;
+            
+            const certificateElement = document.getElementById('certificate');
+            
+            const options = {
+                margin: 10,
+                filename: fileName,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { orientation: 'landscape', unit: 'mm', format: 'a4' }
+            };
+            
+            // Create a clone to avoid affecting the original
+            const clonedElement = certificateElement.cloneNode(true);
+            
+            html2pdf().set(options).from(clonedElement).save().catch(function(error) {
+                console.error('PDF generation error:', error);
+                // Fallback to print if PDF generation fails
+                alert('Download failed. Opening print dialog instead.');
+                window.print();
+            });
         }
 
         // Keyboard shortcut for printing (Ctrl+P within certificate view)
