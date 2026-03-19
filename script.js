@@ -40,21 +40,86 @@ function applyEnglishContent() {
         // Set today's date as default
         document.getElementById('dateIssued').valueAsDate = new Date();
 
+        // Cropper state
+        let cropper = null;
+
         // Photo upload handler
         document.getElementById('staffPhotoInput').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(event) {
-                    const preview = document.getElementById('staffPhotoPreview');
-                    preview.src = event.target.result;
-                    preview.classList.add('show');
-                    // Also update the certificate header photo
-                    document.getElementById('staffPhoto').src = event.target.result;
+                    // Open crop modal with image
+                    const cropImage = document.getElementById('cropImage');
+                    cropImage.src = event.target.result;
+                    document.getElementById('cropModal').classList.add('active');
+
+                    // If a cropper already exists, destroy it before making a new one
+                    if (cropper) {
+                        cropper.destroy();
+                    }
+
+                    // Initialize Cropper.js
+                    cropper = new Cropper(cropImage, {
+                        aspectRatio: 1, // Enforce square crop for circular frame
+                        viewMode: 1,    // Restrict the crop box not to exceed the original canvas
+                        dragMode: 'move',
+                        autoCropArea: 0.9,
+                        restore: false,
+                        guides: true,
+                        center: true,
+                        highlight: false,
+                        cropBoxMovable: true,
+                        cropBoxResizable: true,
+                        toggleDragModeOnDblclick: false,
+                    });
                 };
                 reader.readAsDataURL(file);
             }
         });
+
+        // Crop action methods
+        function cancelCrop() {
+            document.getElementById('cropModal').classList.remove('active');
+            if (cropper) {
+                cropper.destroy();
+                cropper = null;
+            }
+            // Clear input if canceled
+            document.getElementById('staffPhotoInput').value = '';
+            
+            // Only hide preview if there is no previous image
+            const preview = document.getElementById('staffPhotoPreview');
+            if (!preview.src || preview.src.endsWith('index.html')) {
+                preview.classList.remove('show');
+            }
+        }
+
+        function applyCrop() {
+            if (!cropper) return;
+
+            // Get cropped image canvas
+            const canvas = cropper.getCroppedCanvas({
+                width: 600,
+                height: 600,
+                imageSmoothingEnabled: true,
+                imageSmoothingQuality: 'high',
+            });
+
+            // Update previews
+            const croppedDataUrl = canvas.toDataURL('image/jpeg', 0.9);
+            const preview = document.getElementById('staffPhotoPreview');
+            preview.src = croppedDataUrl;
+            preview.classList.add('show');
+            
+            // Update certificate header photo
+            document.getElementById('staffPhoto').src = croppedDataUrl;
+
+            // Cleanup & close modal
+            document.getElementById('cropModal').classList.remove('active');
+            cropper.destroy();
+            cropper = null;
+        }
 
         // Handle form submission
         document.getElementById('certificateForm').addEventListener('submit', function(e) {
@@ -113,46 +178,50 @@ function applyEnglishContent() {
         }
 
         function downloadCertificate() {
+            // Add exporting class to body to prevent mobile media queries
+            document.body.classList.add('exporting');
+
             const staffName = document.getElementById('certStaffName').textContent;
             const sanitizedName = staffName.replace(/[^a-zA-Z0-9\s]/g, '').trim();
             const fileName = `Certificate_${sanitizedName}_${new Date().getTime()}.pdf`;
             
             const certificateElement = document.getElementById('certificate');
             
-            // Generate A4 portrait PDF (210mm x 297mm / 21cm x 29.7cm)
-            const options = {
-                margin: [0, 0, 0, 0],
-                filename: fileName,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: {
-                    scale: 3,
-                    useCORS: true,
-                    logging: false,
-                    windowWidth: 1200,
-                    windowHeight: 1800
-                },
-                jsPDF: {
-                    orientation: 'portrait',
-                    unit: 'mm',
-                    format: 'a4',
-                    compress: true
-                }
-            };
-            
             // Create a clone to avoid affecting the original
             const clonedElement = certificateElement.cloneNode(true);
             clonedElement.classList.add('pdf-export');
 
-            // Mount clone offscreen so CSS/layout is fully applied before capture
+            // Ensure exact pixel sizing wrapper to prevent html2canvas mobile layout clipping
             const exportHost = document.createElement('div');
-            exportHost.style.position = 'fixed';
-            exportHost.style.left = '-10000px';
+            exportHost.style.position = 'absolute';
+            exportHost.style.left = '0';
             exportHost.style.top = '0';
-            exportHost.style.width = '210mm';
-            exportHost.style.height = '297mm';
-            exportHost.style.overflow = 'visible';
+            exportHost.style.width = '794px';
+            exportHost.style.height = '1123px';
+            exportHost.style.zIndex = '-9999';
+            exportHost.style.pointerEvents = 'none';
             exportHost.appendChild(clonedElement);
             document.body.appendChild(exportHost);
+            
+            // Generate A4 portrait PDF using explicit pixels
+            const options = {
+                margin: 0,
+                filename: fileName,
+                image: { type: 'jpeg', quality: 1.0 },
+                html2canvas: {
+                    scale: 3,
+                    useCORS: true,
+                    logging: false,
+                    windowWidth: 794,
+                    windowHeight: 1123
+                },
+                jsPDF: {
+                    orientation: 'portrait',
+                    unit: 'px',
+                    format: [794, 1123],
+                    compress: true
+                }
+            };
             
             // Generate PDF and download
             html2pdf().set(options).from(clonedElement).outputPdf('blob').then(function(pdf) {
@@ -173,12 +242,14 @@ function applyEnglishContent() {
                     document.body.removeChild(link);
                     URL.revokeObjectURL(blobUrl);
                     document.body.removeChild(exportHost);
+                    document.body.classList.remove('exporting');
                 }, 100);
             }).catch(function(error) {
                 console.error('PDF generation error:', error);
                 if (document.body.contains(exportHost)) {
                     document.body.removeChild(exportHost);
                 }
+                document.body.classList.remove('exporting');
                 // Fallback to print if PDF generation fails
                 alert('Download failed. Opening print dialog instead.');
                 window.print();

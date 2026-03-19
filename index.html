@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teacher Appreciation Certificate Generator</title>
         <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -64,7 +66,9 @@
                         <!-- Certificate Body -->
                         <div class="certificate-body">
                             <div class="name-photo-row">
-                                <img id="staffPhoto" src="logo.png" alt="Staff Photo" class="staff-photo-large">
+                                <div class="staff-photo-wrapper">
+                                    <img id="staffPhoto" src="logo.png" alt="Staff Photo" class="staff-photo-large">
+                                </div>
                                 <div class="teacher-name" id="certStaffName" data-lang="english">Staff Name</div>
                             </div>
 
@@ -108,6 +112,20 @@
     </div>
 
         <script src="script.js"></script>
+
+    <!-- Cropping Modal -->
+    <div id="cropModal" class="crop-modal">
+        <div class="crop-modal-content">
+            <h3>Crop Photo</h3>
+            <div class="crop-area-wrapper">
+                <img id="cropImage" src="" alt="Image to crop">
+            </div>
+            <div class="crop-actions">
+                <button type="button" class="btn" style="background: #e74c3c;" onclick="cancelCrop()">Cancel</button>
+                <button type="button" class="btn" style="background: #27ae60;" onclick="applyCrop()">Crop & Apply</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
 
