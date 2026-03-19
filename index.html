@@ -339,8 +339,8 @@
 
         .recognition-text {
             color: #2c3e50;
-            font-size: 14px;
-            line-height: 1.7;
+            font-size: 16px;
+            line-height: 1.65;
             margin: 15px auto;
             max-width: 700px;
             padding: 15px 25px;
@@ -555,8 +555,290 @@
 
         @media screen and (max-width: 900px) {
             .certificate {
-                transform: scale(0.55);
+                transform: scale(0.6);
                 transform-origin: top center;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            body {
+                padding: 12px;
+            }
+
+            .form-section {
+                padding: 20px;
+                margin-bottom: 20px;
+            }
+
+            .form-section h2 {
+                font-size: 20px;
+                line-height: 1.3;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .btn {
+                width: 100%;
+                padding: 13px 18px;
+            }
+
+            .certificate-wrapper {
+                padding: 10px;
+            }
+
+            .certificate {
+                width: 100%;
+                max-width: 100%;
+                height: auto;
+                min-height: 0;
+                padding: 8px;
+                transform: none !important;
+                overflow: hidden;
+            }
+
+            .certificate-border {
+                border-width: 3px;
+                padding: 8px;
+            }
+
+            .certificate-border::before {
+                top: 8px;
+                left: 8px;
+                right: 8px;
+                bottom: 8px;
+            }
+
+            .certificate-header {
+                margin-top: 4px;
+                margin-bottom: 8px;
+                padding-bottom: 8px;
+            }
+
+            .logo {
+                width: 34px;
+                height: 34px;
+                border-width: 1px;
+                padding: 2px;
+            }
+
+            .header-text {
+                padding: 0 8px;
+            }
+
+            .header-text h1 {
+                font-size: 9px;
+                letter-spacing: 0.4px;
+                margin-bottom: 3px;
+            }
+
+            .header-text p {
+                font-size: 7px;
+                letter-spacing: 0.2px;
+            }
+
+            .certificate-title {
+                margin: 8px 0 6px 0;
+            }
+
+            .certificate-title::before {
+                top: -8px;
+                font-size: 10px;
+            }
+
+            .certificate-title::after {
+                width: 110px;
+                bottom: -5px;
+            }
+
+            .certificate-title h2 {
+                font-size: 13px;
+                letter-spacing: 1px;
+                margin-bottom: 4px;
+                padding: 0 14px;
+            }
+
+            .certificate-title h2::before,
+            .certificate-title h2::after {
+                font-size: 10px;
+            }
+
+            .certificate-title .subtitle {
+                font-size: 8px;
+                letter-spacing: 0.8px;
+                padding: 0 22px;
+            }
+
+            .certificate-title .subtitle::before,
+            .certificate-title .subtitle::after {
+                width: 14px;
+            }
+
+            .certificate-body {
+                padding: 0 10px;
+            }
+
+            .presented-to {
+                font-size: 8px;
+                letter-spacing: 1px;
+                margin-bottom: 6px;
+            }
+
+            .teacher-name {
+                font-size: 17px;
+                margin: 8px 0;
+            }
+
+            .teacher-name::before,
+            .teacher-name::after {
+                font-size: 14px;
+                margin: 0 5px;
+            }
+
+            .recognition-text {
+                font-size: 9.5px;
+                line-height: 1.5;
+                margin: 8px auto;
+                padding: 8px 10px;
+                border-left-width: 2px;
+            }
+
+            .recognition-text::before,
+            .recognition-text::after {
+                display: none;
+            }
+
+            .certificate-footer {
+                padding: 0 8px;
+                margin-top: 8px;
+            }
+
+            .certificate-footer::before {
+                top: -8px;
+                width: 90%;
+            }
+
+            .date-value,
+            .principal-name {
+                font-size: 8px;
+            }
+
+            .date-label,
+            .principal-title {
+                font-size: 7px;
+                letter-spacing: 0.5px;
+            }
+
+            .date-line {
+                width: 75px;
+                border-top-width: 1px;
+            }
+
+            .signature-line {
+                width: 95px;
+                border-top-width: 1px;
+            }
+
+            .signature-img {
+                max-width: 78px;
+                max-height: 24px;
+            }
+
+            .action-buttons {
+                margin-top: 16px;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                position: relative;
+                z-index: 1;
+            }
+
+            .action-buttons button {
+                margin: 0;
+                width: 100%;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .form-section {
+                padding: 16px;
+            }
+
+            .form-group input,
+            .form-group textarea {
+                padding: 11px;
+            }
+
+            .certificate {
+                padding: 6px;
+                min-height: 0;
+            }
+
+            .certificate-border {
+                padding: 6px;
+            }
+
+            .logo {
+                width: 30px;
+                height: 30px;
+            }
+
+            .header-text h1 {
+                font-size: 8px;
+            }
+
+            .header-text p {
+                font-size: 6.5px;
+            }
+
+            .certificate-title h2 {
+                font-size: 11px;
+                letter-spacing: 0.6px;
+                padding: 0 10px;
+            }
+
+            .certificate-title .subtitle {
+                font-size: 7px;
+                padding: 0 16px;
+            }
+
+            .presented-to {
+                font-size: 7px;
+            }
+
+            .teacher-name {
+                font-size: 15px;
+            }
+
+            .recognition-text {
+                font-size: 8px;
+                line-height: 1.45;
+                padding: 7px 8px;
+            }
+
+            .date-value,
+            .principal-name {
+                font-size: 7px;
+            }
+
+            .date-label,
+            .principal-title {
+                font-size: 6px;
+            }
+
+            .date-line {
+                width: 65px;
+            }
+
+            .signature-line {
+                width: 85px;
+            }
+
+            .signature-img {
+                max-width: 70px;
+                max-height: 20px;
             }
         }
 
@@ -634,7 +916,7 @@
                             <div class="teacher-name" id="certStaffName">Staff Name</div>
 
                             <div class="recognition-text">
-                                In recognition and appreciation of valuable contribution and dedicated service towards the successful conduct of <strong>SSC 2026</strong> Examination. Through exemplary dedication, diligent supervision and management, you have ensured smooth conduct of assessment and maintained examination integrity with utmost sincerity. We express our heartfelt gratitude and sincere appreciation for the commendable service rendered to ensure the successful conduct of the examination.
+                                Presented with sincere appreciation for your dedicated contribution to the successful conduct of the <strong>SSC 2026</strong> Examination. Your responsible supervision, discipline and commitment helped ensure smooth operations and uphold examination integrity.
                             </div>
                         </div>
 
