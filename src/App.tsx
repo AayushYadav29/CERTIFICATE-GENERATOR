@@ -51,16 +51,36 @@ function App() {
     return d.toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' });
   };
 
-  const captureCanvas = () =>
-    html2canvas(certificateRef.current!, {
-      scale: 3,
-      useCORS: true,
-      allowTaint: true,
-      backgroundColor: '#ffffff',
-      width: 794,
-      height: 1123,
-      logging: false,
-    });
+  const captureCanvas = async () => {
+    const el = certificateRef.current!;
+    const wrapper = el.closest('.cert-wrapper') as HTMLElement;
+    
+    // Temporarily remove transform to ensure html2canvas captures full resolution without cutoff
+    if (wrapper) {
+      wrapper.setAttribute('data-exporting', 'true');
+    }
+    
+    try {
+      // Add a small delay for CSS to apply
+      await new Promise(resolve => setTimeout(resolve, 50));
+      
+      return await html2canvas(el, {
+        scale: 3,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: '#ffffff',
+        width: 794,
+        height: 1123,
+        logging: false,
+        windowWidth: 794,
+      });
+    } finally {
+      // Restore the transform after capture
+      if (wrapper) {
+        wrapper.removeAttribute('data-exporting');
+      }
+    }
+  };
 
   const handleDownloadPNG = async () => {
     if (!certificateRef.current) return;
@@ -433,11 +453,14 @@ function App() {
           </div>
 
           {/* Certificate Preview */}
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <div style={{
-              boxShadow: '0 30px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(94,234,212,0.1)',
-              borderRadius: '2px',
-            }}>
+          <div className="cert-container">
+            <div
+              className="cert-wrapper"
+              style={{
+                boxShadow: '0 30px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(94,234,212,0.1)',
+                borderRadius: '2px',
+              }}
+            >
               <Certificate
                 ref={certificateRef}
                 staffName={staffName}

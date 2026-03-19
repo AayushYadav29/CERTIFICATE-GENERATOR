@@ -49,6 +49,55 @@ body {
   position: absolute !important;
 }
 
+/* Responsive Certificate Preview */
+.cert-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  overflow: hidden;
+  padding-bottom: 20px;
+}
+
+.cert-wrapper {
+  transform-origin: top center;
+}
+.cert-wrapper[data-exporting="true"] {
+  transform: none !important;
+}
+
+@media (max-width: 850px) {
+  .cert-container {
+    height: 930px;
+  }
+  .cert-wrapper {
+    transform: scale(0.8);
+  }
+}
+@media (max-width: 680px) {
+  .cert-container {
+    height: 720px;
+  }
+  .cert-wrapper {
+    transform: scale(0.6);
+  }
+}
+@media (max-width: 480px) {
+  .cert-container {
+    height: 540px;
+  }
+  .cert-wrapper {
+    transform: scale(0.45);
+  }
+}
+@media (max-width: 380px) {
+  .cert-container {
+    height: 480px;
+  }
+  .cert-wrapper {
+    transform: scale(0.4);
+  }
+}
+
 /* Shimmer animation for the form header */
 @keyframes shimmer {
   0% { background-position: -200% center; }
