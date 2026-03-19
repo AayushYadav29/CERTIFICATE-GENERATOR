@@ -410,7 +410,7 @@ const Certificate = forwardRef<HTMLDivElement, CertificateProps>(
           <div style={{ display:'flex', alignItems:'center', gap:'16px', marginBottom:'2px' }}>
             <div style={{ flexShrink:0, width:'90px', height:'90px' }}>
               <img
-                src="./logo.png"
+                src="/logo.png"
                 alt="Board Logo"
                 style={{ width:'90px', height:'90px', objectFit:'contain' }}
                 crossOrigin="anonymous"
@@ -717,7 +717,7 @@ const Certificate = forwardRef<HTMLDivElement, CertificateProps>(
             {/* Signature block */}
             <div style={{ textAlign:'center', minWidth:'220px' }}>
               <img
-                src="./signature.png"
+                src="/signature.png"
                 alt="Signature"
                 style={{ height:'52px', objectFit:'contain', display:'block', margin:'0 auto 4px auto' }}
                 crossOrigin="anonymous"
