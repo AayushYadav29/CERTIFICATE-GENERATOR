@@ -137,7 +137,7 @@
             top: 15px;
             left: 15px;
             right: 15px;
-            bottom: 15px;
+            bottom: 8px;
             border: 1px solid rgba(32, 178, 170, 0.3);
             pointer-events: none;
         }
@@ -350,6 +350,7 @@
             flex-direction: column;
             justify-content: center;
             padding: 0 60px;
+            max-height: 280px;
         }
 
         .presented-to {
@@ -425,9 +426,9 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
-            padding: 0 60px;
-            margin-top: 20px;
-            margin-bottom: 20px;
+            padding: 0 40px;
+            margin-top: 8px;
+            margin-bottom: 0;
             position: relative;
         }
 
@@ -460,13 +461,14 @@
             color: #2c3e50;
             font-size: 13px;
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
+            line-height: 1.1;
         }
 
         .date-line {
             width: 150px;
             border-top: 2px solid #008B8B;
-            margin-bottom: 5px;
+            margin-bottom: 3px;
             position: relative;
         }
 
@@ -492,18 +494,19 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            max-width: 250px;
         }
 
         .signature-img {
-            max-width: 160px;
-            max-height: 50px;
-            margin-bottom: 5px;
+            max-width: 140px;
+            max-height: 40px;
+            margin-bottom: 3px;
         }
 
         .signature-line {
-            width: 200px;
+            width: 180px;
             border-top: 2px solid #008B8B;
-            margin-bottom: 5px;
+            margin-bottom: 2px;
             position: relative;
         }
 
@@ -521,7 +524,8 @@
             color: #2c3e50;
             font-size: 13px;
             font-weight: 600;
-            margin-bottom: 3px;
+            margin-bottom: 0;
+            line-height: 1.2;
         }
 
         .principal-title {
@@ -530,6 +534,8 @@
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
+            margin-bottom: 1px;
+            line-height: 1.1;
         }
 
         .action-buttons {
@@ -786,7 +792,8 @@
 
             .certificate-footer {
                 padding: 0 8px;
-                margin-top: 8px;
+                margin-top: 10px;
+                margin-bottom: 5px;
             }
 
             .certificate-footer::before {
@@ -979,18 +986,28 @@
 
         .school-info {
             color: #2c3e50;
-            font-size: 10px;
+            font-size: 8px;
             font-weight: 600;
             text-align: center;
-            margin-top: 5px;
-            letter-spacing: 0.5px;
+            margin-top: 1px;
+            letter-spacing: 0.3px;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            line-height: 1.15;
+        }
+
+        .school-info > div {
+            font-size: 8px;
+            line-height: 1.15;
+            word-break: break-word;
         }
 
         .school-info[data-lang="hindi"],
         .school-info[data-lang="marathi"] {
             font-family: 'Segoe UI', 'Noto Sans Devanagari', sans-serif;
             letter-spacing: 0px;
-            font-size: 9px;
+            font-size: 8px;
         }
 
         #staffPhotoPreview {
@@ -1114,8 +1131,8 @@
                                     <div class="principal-name" id="certPrincipalName">Mr. Dinesh Dayaram Yadav</div>
                                     <div class="principal-title" id="principalTitle">Chief Conductor</div>
                                     <div class="school-info" id="schoolInfo" data-lang="english">
-                                        <div>St. Agrasen High School</div>
-                                        <div>Centre No. 6118</div>
+                                        <div id="centreNumber">Centre No. 6118</div>
+                                        <div id="schoolName">St. Agrasen High School & Jr. College<br>Kalwa East Thane 400605</div>
                                     </div>
                                 </div>
                             </div>
@@ -1144,7 +1161,7 @@
                 dateLabel: "Date",
                 principalTitle: "Chief Conductor",
                 staffNameLabel: "Staff Member's Full Name *",
-                schoolName: "St. Agrasen High School",
+                schoolName: "St. Agrasen High School & Jr. College<br>Kalwa East Thane 400605",
                 centreNumber: "Centre No. 6118"
             },
             hindi: {
@@ -1156,7 +1173,7 @@
                 dateLabel: "दिनांक",
                 principalTitle: "मुख्य संचालक",
                 staffNameLabel: "कर्मचारी का पूरा नाम *",
-                schoolName: "सेंट अग्रसेन हाई स्कूल",
+                schoolName: "सेंट अग्रसेन हाई स्कूल & जूनियर कॉलेज<br>कालवा ईस्ट ठाणे 400605",
                 centreNumber: "केंद्र क्रमांक 6118"
             },
             marathi: {
@@ -1168,7 +1185,7 @@
                 dateLabel: "दिनांक",
                 principalTitle: "मुख्य संचालक",
                 staffNameLabel: "कर्मचारीचे पूर्ण नाव *",
-                schoolName: "सेंट अग्रसेन हायस्कूल",
+                schoolName: "सेंट अग्रसेन हायस्कूल & ज्यु. कॉलेज<br>कालवा पूर्व ठाणे 400605",
                 centreNumber: "केंद्र क्र. 6118"
             }
         };
@@ -1188,13 +1205,16 @@
             document.getElementById('staffNameLabel').textContent = trans.staffNameLabel;
             document.getElementById('certStaffName').setAttribute('data-lang', language);
             
-            // Update school info
+            // Update school info with centre number and school name
             const schoolInfoDiv = document.getElementById('schoolInfo');
             schoolInfoDiv.setAttribute('data-lang', language);
-            const schoolLines = schoolInfoDiv.querySelectorAll('div');
-            if (schoolLines.length >= 2) {
-                schoolLines[0].textContent = trans.schoolName;
-                schoolLines[1].textContent = trans.centreNumber;
+            const centreNumberDiv = document.getElementById('centreNumber');
+            const schoolNameDiv = document.getElementById('schoolName');
+            if (centreNumberDiv) {
+                centreNumberDiv.innerHTML = trans.centreNumber;
+            }
+            if (schoolNameDiv) {
+                schoolNameDiv.innerHTML = trans.schoolName;
             }
         }
 
@@ -1286,19 +1306,24 @@
             
             const certificateElement = document.getElementById('certificate');
             
-            // Always use A4 landscape for downloads
+            // Generate A4 landscape PDF (297mm x 210mm / 29.7cm x 21cm)
             const options = {
-                margin: 10,
+                margin: [0, 0, 0, 0],
                 filename: fileName,
                 image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { orientation: 'landscape', unit: 'mm', format: 'A4' }
+                html2canvas: { scale: 2, logging: false },
+                jsPDF: {
+                    orientation: 'landscape',
+                    unit: 'mm',
+                    format: 'a4',
+                    compress: true
+                }
             };
             
             // Create a clone to avoid affecting the original
             const clonedElement = certificateElement.cloneNode(true);
             
-            // Generate PDF and open it
+            // Generate PDF and download
             html2pdf().set(options).from(clonedElement).outputPdf('blob').then(function(pdf) {
                 // Create a blob URL
                 const blobUrl = URL.createObjectURL(pdf);
@@ -1307,9 +1332,8 @@
                 const link = document.createElement('a');
                 link.href = blobUrl;
                 link.download = fileName;
-                link.target = '_blank'; // Open in new tab/window on mobile
                 
-                // Trigger download and open
+                // Trigger download
                 document.body.appendChild(link);
                 link.click();
                 
