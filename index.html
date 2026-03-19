@@ -1200,7 +1200,27 @@
             // Create a clone to avoid affecting the original
             const clonedElement = certificateElement.cloneNode(true);
             
-            html2pdf().set(options).from(clonedElement).save().catch(function(error) {
+            // Generate PDF and open it
+            html2pdf().set(options).from(clonedElement).outputPdf('blob').then(function(pdf) {
+                // Create a blob URL
+                const blobUrl = URL.createObjectURL(pdf);
+                
+                // Create a temporary link element
+                const link = document.createElement('a');
+                link.href = blobUrl;
+                link.download = fileName;
+                link.target = '_blank'; // Open in new tab/window on mobile
+                
+                // Trigger download and open
+                document.body.appendChild(link);
+                link.click();
+                
+                // Cleanup
+                setTimeout(function() {
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(blobUrl);
+                }, 100);
+            }).catch(function(error) {
                 console.error('PDF generation error:', error);
                 // Fallback to print if PDF generation fails
                 alert('Download failed. Opening print dialog instead.');
