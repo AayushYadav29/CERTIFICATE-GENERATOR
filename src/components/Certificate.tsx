@@ -417,9 +417,9 @@ const Certificate = forwardRef<HTMLDivElement, CertificateProps>(
                 onError={(e) => { (e.target as HTMLImageElement).src = LOGO_FALLBACK; }}
               />
             </div>
-            <div style={{ flex:1, textAlign:'center', paddingRight:'90px' }}>
+            <div style={{ flex:1, textAlign:'center', paddingRight:'50px' }}>
               <div style={{
-                fontSize:'19px',
+                fontSize:'18.5px',
                 fontWeight:'800',
                 color:'#0d9488',
                 margin:'0 0 3px 0',
@@ -428,10 +428,10 @@ const Certificate = forwardRef<HTMLDivElement, CertificateProps>(
                 fontFamily:"'Cinzel', serif",
                 textTransform:'uppercase',
               }}>
-                M. S. Board Of Secondary And
+               Maharashtra State Board Of Secondary
               </div>
               <div style={{
-                fontSize:'19px',
+                fontSize:'17px',
                 fontWeight:'800',
                 color:'#0d9488',
                 margin:'0 0 4px 0',
@@ -440,7 +440,7 @@ const Certificate = forwardRef<HTMLDivElement, CertificateProps>(
                 fontFamily:"'Cinzel', serif",
                 textTransform:'uppercase',
               }}>
-                Higher Secondary Education
+                and Higher Secondary Education
               </div>
               <div style={{
                 fontSize:'14.5px',
@@ -694,7 +694,7 @@ const Certificate = forwardRef<HTMLDivElement, CertificateProps>(
                 fontSize:'17px',
                 color:'#0a4f47',
                 fontWeight:'700',
-                fontFamily:"'Playfair Display', serif",
+                fontFamily:"serif",
                 paddingBottom:'3px',
                 borderBottom:'2px solid #0d9488',
                 letterSpacing:'0.5px',
@@ -749,9 +749,9 @@ const Certificate = forwardRef<HTMLDivElement, CertificateProps>(
                 Mr. Dinesh Dayaram Yadav
               </div>
               <div style={{
-                fontSize:'14px',
+                fontSize:'11px',
                 color:'#1a2e2b',
-                fontFamily:"'Cormorant Garamond', serif",
+                fontFamily:"serif",
                 fontWeight:'700',
                 margin:'0 0 2px 0',
                 letterSpacing:'0.4px',
@@ -759,9 +759,9 @@ const Certificate = forwardRef<HTMLDivElement, CertificateProps>(
                 Centre No 6118
               </div>
               <div style={{
-                fontSize:'13.5px',
+                fontSize:'12.5px',
                 color:'#1a2e2b',
-                fontFamily:"'Cormorant Garamond', serif",
+                fontFamily:"serif",
                 fontWeight:'700',
                 margin:0,
                 letterSpacing:'0.3px',
