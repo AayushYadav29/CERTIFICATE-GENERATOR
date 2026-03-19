@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Appreciation Certificate Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #008B8B 0%, #20B2AA 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .form-section {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #008B8B;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #008B8B 0%, #20B2AA 100%);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 139, 139, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        /* Certificate Styles */
+        .certificate-wrapper {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+
+        .certificate-wrapper.active {
+            display: block;
+        }
+
+        .certificate {
+            width: 297mm;
+            height: 210mm;
+            background: white;
+            position: relative;
+            margin: 0 auto;
+            padding: 12mm;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .certificate-border {
+            border: 6px solid #008B8B;
+            height: 100%;
+            padding: 10mm;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background: white;
+            box-shadow: inset 0 0 30px rgba(0, 139, 139, 0.03);
+        }
+
+        /* Inner border */
+        .certificate-border::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            bottom: 15px;
+            border: 1px solid rgba(32, 178, 170, 0.3);
+            pointer-events: none;
+        }
+
+        .certificate-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Header Section */
+        .certificate-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            margin-top: 20px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #008B8B;
+            position: relative;
+        }
+
+        .certificate-header::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #20B2AA, transparent);
+        }
+
+        .logo {
+            width: 70px;
+            height: 70px;
+            object-fit: contain;
+            flex-shrink: 0;
+            border: 2px solid #20B2AA;
+            border-radius: 8px;
+            padding: 5px;
+            background: linear-gradient(135deg, rgba(32, 178, 170, 0.05), white);
+            box-shadow: 0 2px 8px rgba(0, 139, 139, 0.15);
+        }
+
+        .header-text {
+            flex: 1;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .header-text h1 {
+            color: #008B8B;
+            font-size: 20px;
+            font-weight: 700;
+            line-height: 1.5;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-family: 'Georgia', serif;
+            text-shadow: 2px 2px 3px rgba(0, 139, 139, 0.1);
+        }
+
+        .header-text p {
+            color: #2c3e50;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: 'Arial', sans-serif;
+            letter-spacing: 0.8px;
+        }
+
+        /* Certificate Title */
+        .certificate-title {
+            text-align: center;
+            margin: 20px 0 15px 0;
+            position: relative;
+        }
+
+        .certificate-title::before {
+            content: '✦';
+            position: absolute;
+            left: 50%;
+            top: -15px;
+            transform: translateX(-50%);
+            color: #20B2AA;
+            font-size: 20px;
+        }
+
+        .certificate-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #008B8B, transparent);
+        }
+
+        .certificate-title h2 {
+            color: #008B8B;
+            font-size: 36px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 8px;
+            font-family: 'Arial', sans-serif;
+            position: relative;
+            display: inline-block;
+            padding: 0 30px;
+        }
+
+        .certificate-title h2::before,
+        .certificate-title h2::after {
+            content: '❖';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #20B2AA;
+            font-size: 20px;
+        }
+
+        .certificate-title h2::before {
+            left: 0;
+        }
+
+        .certificate-title h2::after {
+            right: 0;
+        }
+
+        .certificate-title .subtitle {
+            color: #20B2AA;
+            font-size: 16px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            display: inline-block;
+            padding: 0 40px;
+        }
+
+        .certificate-title .subtitle::before,
+        .certificate-title .subtitle::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 30px;
+            height: 1px;
+            background: #20B2AA;
+        }
+
+        .certificate-title .subtitle::before {
+            left: 0;
+        }
+
+        .certificate-title .subtitle::after {
+            right: 0;
+        }
+
+        /* Certificate Body */
+        .certificate-body {
+            text-align: center;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 60px;
+        }
+
+        .presented-to {
+            font-size: 14px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .teacher-name {
+            color: #008B8B;
+            font-size: 32px;
+            font-weight: 700;
+            margin: 15px 0;
+            font-style: italic;
+            font-family: 'Georgia', serif;
+            position: relative;
+            display: inline-block;
+        }
+
+        .teacher-name::before,
+        .teacher-name::after {
+            content: '~';
+            color: #20B2AA;
+            font-size: 24px;
+            margin: 0 15px;
+            font-style: normal;
+        }
+
+        .recognition-text {
+            color: #2c3e50;
+            font-size: 14px;
+            line-height: 1.7;
+            margin: 15px auto;
+            max-width: 700px;
+            padding: 15px 25px;
+            background: linear-gradient(135deg, rgba(32, 178, 170, 0.03), white, rgba(32, 178, 170, 0.03));
+            border-left: 3px solid #20B2AA;
+            border-radius: 5px;
+            box-shadow: 0 2px 8px rgba(0, 139, 139, 0.08);
+            position: relative;
+        }
+
+        .recognition-text::before,
+        .recognition-text::after {
+            content: '"';
+            font-size: 40px;
+            color: rgba(0, 139, 139, 0.15);
+            font-family: Georgia, serif;
+            position: absolute;
+        }
+
+        .recognition-text::before {
+            top: -5px;
+            left: 10px;
+        }
+
+        .recognition-text::after {
+            content: '"';
+            bottom: -25px;
+            right: 10px;
+        }
+
+        .recognition-text strong {
+            color: #008B8B;
+            font-weight: 700;
+        }
+
+        /* Certificate Footer */
+        .certificate-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding: 0 60px;
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .certificate-footer::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0, 139, 139, 0.2), transparent);
+        }
+
+        .footer-left {
+            text-align: center;
+        }
+
+        .footer-right {
+            text-align: center;
+        }
+
+        .date-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .date-value {
+            color: #2c3e50;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .date-line {
+            width: 150px;
+            border-top: 2px solid #008B8B;
+            margin-bottom: 5px;
+            position: relative;
+        }
+
+        .date-line::before {
+            content: '✦';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #20B2AA;
+            font-size: 12px;
+        }
+
+        .date-label {
+            color: #008B8B;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .signature-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .signature-img {
+            max-width: 160px;
+            max-height: 50px;
+            margin-bottom: 5px;
+        }
+
+        .signature-line {
+            width: 200px;
+            border-top: 2px solid #008B8B;
+            margin-bottom: 5px;
+            position: relative;
+        }
+
+        .signature-line::before {
+            content: '✦';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #20B2AA;
+            font-size: 12px;
+        }
+
+        .principal-name {
+            color: #2c3e50;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .principal-title {
+            color: #008B8B;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .action-buttons {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .action-buttons button {
+            margin: 0 10px;
+        }
+
+        .back-btn {
+            background: #6c757d;
+        }
+
+        .back-btn:hover {
+            background: #5a6268;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+                margin: 0;
+            }
+
+            .form-section,
+            .action-buttons {
+                display: none !important;
+            }
+
+            .certificate-wrapper {
+                display: block !important;
+                box-shadow: none;
+                padding: 0;
+                border-radius: 0;
+                margin: 0;
+            }
+
+            .certificate {
+                box-shadow: none;
+                page-break-after: avoid;
+                margin: 0;
+                padding: 12mm;
+                width: 297mm;
+                height: 210mm;
+            }
+
+            @page {
+                size: A4 landscape;
+                margin: 0;
+            }
+        }
+
+        @media screen and (max-width: 1400px) {
+            .certificate {
+                transform: scale(0.85);
+                transform-origin: top center;
+            }
+        }
+
+        @media screen and (max-width: 1200px) {
+            .certificate {
+                transform: scale(0.7);
+                transform-origin: top center;
+            }
+        }
+
+        @media screen and (max-width: 900px) {
+            .certificate {
+                transform: scale(0.55);
+                transform-origin: top center;
+            }
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-input-wrapper input[type="file"] {
+            cursor: pointer;
+        }
+
+        .preview-img {
+            max-width: 200px;
+            max-height: 100px;
+            margin-top: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Form Section -->
+        <div class="form-section" id="formSection">
+            <h2>SSC 2026 Exam - Staff Appreciation Certificate</h2>
+            <form id="certificateForm">
+                <div class="form-group">
+                    <label for="staffName">Staff Member's Full Name *</label>
+                    <input type="text" id="staffName" required placeholder="Enter name" style="font-size: 16px; padding: 15px;">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="dateIssued">Date of Issue *</label>
+                        <input type="date" id="dateIssued" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="principalName">Principal's Name</label>
+                        <input type="text" id="principalName" value="Mr. Dinesh Dayaram Yadav" readonly style="background-color: #f5f5f5;">
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 30px;">
+                    <button type="submit" class="btn">Generate Certificate</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Certificate Section -->
+        <div class="certificate-wrapper" id="certificateWrapper">
+            <div class="certificate" id="certificate">
+                <div class="certificate-border">
+                    <div class="certificate-content">
+                        <!-- Header Section -->
+                        <div class="certificate-header">
+                            <img src="logo1.png" alt="Left Logo" class="logo">
+                            <div class="header-text">
+                                <h1>M. S. Board Of Secondary And Higher Secondary Education,</h1>
+                                <p>Mumbai Divisional Board, Vashi, Navi Mumbai-400 703.</p>
+                            </div>
+                            <img src="logo.png" alt="Right Logo" class="logo">
+                        </div>
+
+                        <!-- Certificate Title -->
+                        <div class="certificate-title">
+                            <h2>CERTIFICATE OF APPRECIATION</h2>
+                            <div class="subtitle">Proudly Presented To</div>
+                        </div>
+
+                        <!-- Certificate Body -->
+                        <div class="certificate-body">
+                            <div class="teacher-name" id="certStaffName">Staff Name</div>
+
+                            <div class="recognition-text">
+                                In recognition and appreciation of valuable contribution and dedicated service towards the successful conduct of <strong>SSC 2026</strong> Examination. Through exemplary dedication, diligent supervision and management, you have ensured smooth conduct of assessment and maintained examination integrity with utmost sincerity. We express our heartfelt gratitude and sincere appreciation for the commendable service rendered to ensure the successful conduct of the examination.
+                            </div>
+                        </div>
+
+                        <!-- Footer Section -->
+                        <div class="certificate-footer">
+                            <div class="footer-left">
+                                <div class="date-box">
+                                    <div class="date-value" id="certDate">March 19, 2026</div>
+                                    <div class="date-line"></div>
+                                    <div class="date-label">Date</div>
+                                </div>
+                            </div>
+                            <div class="footer-right">
+                                <div class="signature-box">
+                                    <img src="Yadav Sir Sign.png" alt="Principal Signature" class="signature-img">
+                                    <div class="signature-line"></div>
+                                    <div class="principal-name" id="certPrincipalName">Mr. Dinesh Dayaram Yadav</div>
+                                    <div class="principal-title">Principal</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn back-btn" onclick="goBack()">Back to Form</button>
+                <button class="btn" onclick="printCertificate()">Print/Save Certificate</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Set today's date as default
+        document.getElementById('dateIssued').valueAsDate = new Date();
+
+        // Handle form submission
+        document.getElementById('certificateForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Get form values
+            const staffName = document.getElementById('staffName').value;
+            const dateIssued = document.getElementById('dateIssued').value;
+            const principalName = document.getElementById('principalName').value;
+
+            // Populate certificate fields
+            document.getElementById('certStaffName').textContent = staffName;
+
+            // Format date
+            const dateObj = new Date(dateIssued);
+            const formattedDate = dateObj.toLocaleDateString('en-US', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+            document.getElementById('certDate').textContent = formattedDate;
+
+            // Set principal name
+            if (principalName) {
+                document.getElementById('certPrincipalName').textContent = principalName;
+            }
+
+            // Show certificate, hide form
+            document.getElementById('formSection').style.display = 'none';
+            document.getElementById('certificateWrapper').classList.add('active');
+
+            // Scroll to certificate
+            document.getElementById('certificateWrapper').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        function goBack() {
+            document.getElementById('formSection').style.display = 'block';
+            document.getElementById('certificateWrapper').classList.remove('active');
+            document.getElementById('formSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function printCertificate() {
+            window.print();
+        }
+
+        // Keyboard shortcut for printing (Ctrl+P within certificate view)
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'p' && document.getElementById('certificateWrapper').classList.contains('active')) {
+                e.preventDefault();
+                printCertificate();
+            }
+        });
+    </script>
+</body>
+</html>
