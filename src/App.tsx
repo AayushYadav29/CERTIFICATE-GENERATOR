@@ -341,11 +341,6 @@ function App() {
                 </button>
               </div>
             </div>
-
-            {/* Footer note */}
-            <p style={{ textAlign: 'center', margin: '16px 0 0 0', fontSize: '11.5px', color: '#5eead4', opacity: 0.5, letterSpacing: '0.3px' }}>
-              Place logo.png & signature.png in the public folder for best results
-            </p>
           </div>
         </div>
       ) : (
