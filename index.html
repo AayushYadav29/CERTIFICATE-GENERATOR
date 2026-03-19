@@ -367,7 +367,7 @@
             font-weight: 700;
             margin: 15px 0;
             font-style: italic;
-            font-family: 'Georgia', serif;
+            font-family: 'Noto Serif Devanagari', 'Georgia', serif;
             position: relative;
             display: inline-block;
         }
@@ -427,6 +427,7 @@
             align-items: flex-end;
             padding: 0 60px;
             margin-top: 20px;
+            margin-bottom: 20px;
             position: relative;
         }
 
@@ -546,6 +547,20 @@
 
         .back-btn:hover {
             background: #5a6268;
+        }
+
+        .download-btn {
+            display: none;
+        }
+
+        @media screen and (max-width: 768px) {
+            .print-btn {
+                display: none !important;
+            }
+
+            .download-btn {
+                display: inline-block !important;
+            }
         }
 
         @media print {
@@ -962,6 +977,36 @@
             border-color: #008B8B;
         }
 
+        .school-info {
+            color: #2c3e50;
+            font-size: 10px;
+            font-weight: 600;
+            text-align: center;
+            margin-top: 5px;
+            letter-spacing: 0.5px;
+        }
+
+        .school-info[data-lang="hindi"],
+        .school-info[data-lang="marathi"] {
+            font-family: 'Segoe UI', 'Noto Sans Devanagari', sans-serif;
+            letter-spacing: 0px;
+            font-size: 9px;
+        }
+
+        #staffPhotoPreview {
+            max-width: 150px;
+            max-height: 120px;
+            margin-top: 10px;
+            border: 2px dashed #008B8B;
+            border-radius: 5px;
+            padding: 5px;
+            display: none;
+        }
+
+        #staffPhotoPreview.show {
+            display: block;
+        }
+
         @media screen and (max-width: 768px) {
             .language-selector {
                 flex-direction: column;
@@ -970,6 +1015,11 @@
 
             .language-selector select {
                 width: 100%;
+            }
+
+            #staffPhotoPreview {
+                max-width: 100px;
+                max-height: 80px;
             }
         }
     </style>
@@ -982,8 +1032,14 @@
             <h2>SSC 2026 Exam - Staff Appreciation Certificate</h2>
             <form id="certificateForm">
                 <div class="form-group">
-                    <label for="staffName">Staff Member's Full Name *</label>
+                    <label for="staffName" id="staffNameLabel">Staff Member's Full Name *</label>
                     <input type="text" id="staffName" required placeholder="Enter name" style="font-size: 16px; padding: 15px;">
+                </div>
+
+                <div class="form-group">
+                    <label for="staffPhotoInput">Upload Your Photo</label>
+                    <input type="file" id="staffPhotoInput" accept="image/*" style="padding: 10px;">
+                    <img id="staffPhotoPreview" alt="Staff Photo Preview" style="margin-top: 10px;">
                 </div>
 
                 <div class="language-selector">
@@ -1024,7 +1080,7 @@
                                 <h1 id="headerLine1">M. S. Board Of Secondary And Higher Secondary Education,</h1>
                                 <p id="headerLine2">Mumbai Divisional Board, Vashi, Navi Mumbai-400 703.</p>
                             </div>
-                            <img src="logo.png" alt="Right Logo" class="logo">
+                            <img id="staffPhoto" src="logo1.png" alt="Staff Photo" class="logo">
                         </div>
 
                         <!-- Certificate Title -->
@@ -1035,7 +1091,7 @@
 
                         <!-- Certificate Body -->
                         <div class="certificate-body">
-                            <div class="teacher-name" id="certStaffName">Staff Name</div>
+                            <div class="teacher-name" id="certStaffName" data-lang="english">Staff Name</div>
 
                             <div class="recognition-text" id="recognitionText">
                                 Presented with sincere appreciation for your dedicated contribution to the successful conduct of the <strong>SSC 2026</strong> Examination. Your responsible supervision, discipline and commitment helped ensure smooth operations and uphold examination integrity.
@@ -1057,6 +1113,10 @@
                                     <div class="signature-line"></div>
                                     <div class="principal-name" id="certPrincipalName">Mr. Dinesh Dayaram Yadav</div>
                                     <div class="principal-title" id="principalTitle">Chief Conductor</div>
+                                    <div class="school-info" id="schoolInfo" data-lang="english">
+                                        <div>St. Agrasen High School</div>
+                                        <div>Centre No. 6118</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1066,7 +1126,8 @@
 
             <div class="action-buttons">
                 <button class="btn back-btn" onclick="goBack()">Back to Form</button>
-                <button class="btn" onclick="printCertificate()">Print/Save Certificate</button>
+                <button class="btn print-btn" onclick="printCertificate()">Print/Save Certificate</button>
+                <button class="btn download-btn" onclick="downloadCertificate()">Download Certificate</button>
             </div>
         </div>
     </div>
@@ -1079,27 +1140,36 @@
                 headerLine2: "Mumbai Divisional Board, Vashi, Navi Mumbai-400 703.",
                 certTitle: "CERTIFICATE OF APPRECIATION",
                 presentedTo: "Proudly Presented To",
-                recognitionText: "This certificate is presented to you for your valuable contribution and dedicated efforts in the successful conduct of the Secondary School Certificate Examination, February–March 2026, organized by the Maharashtra State Board at St. Agrasen High School (Centre No. 611). Your diligence, discipline, and commitment are highly commendable.",
+                recognitionText: "This certificate is presented in recognition of your valuable contribution and dedicated efforts in the successful conduct of the Secondary School Certificate Examination, February–March 2026, organized by the Maharashtra State Board of Secondary and Higher Secondary Education. Your diligence, discipline, and commitment are highly commendable.",
                 dateLabel: "Date",
-                principalTitle: "Chief Conductor"
+                principalTitle: "Chief Conductor",
+                staffNameLabel: "Staff Member's Full Name *",
+                schoolName: "St. Agrasen High School",
+                centreNumber: "Centre No. 6118"
             },
             hindi: {
                 headerLine1: "महाराष्ट्र माध्यमिक और उच्च माध्यमिक शिक्षा बोर्ड,",
                 headerLine2: "मुंबई विभागीय बोर्ड, वाशी, नवी मुंबई-400 703.",
                 certTitle: "प्रशंसा प्रमाणपत्र",
                 presentedTo: "गर्व से प्रस्तुत किया गया",
-                recognitionText: "यह प्रमाणपत्र आपको सेंट अग्रसेन हाई स्कूल (केंद्र क्रमांक ६११) द्वारा महाराष्ट्र राज्य बोर्ड की आयोजित माध्यमिक शालांत प्रमाणपत्र परीक्षा फरवरी–मार्च २०२६ के सफल संचालन में आपके महत्वपूर्ण योगदान एवं समर्पित प्रयासों के लिए प्रदान किया जाता है। आपकी लगन, अनुशासन एवं निष्ठा सराहनीय है।",
+                recognitionText: "यह प्रमाणपत्र महाराष्ट्र राज्य माध्यमिक एवं उच्च माध्यमिक शिक्षा बोर्ड द्वारा आयोजित माध्यमिक शालांत प्रमाणपत्र परीक्षा फरवरी–मार्च २०२६ के सफल संचालन में आपके महत्वपूर्ण योगदान एवं समर्पित प्रयासों के लिए प्रदान किया जाता है। आपकी लगन, अनुशासन एवं निष्ठा सराहनीय है।",
                 dateLabel: "दिनांक",
-                principalTitle: "मुख्य संचालक"
+                principalTitle: "मुख्य संचालक",
+                staffNameLabel: "कर्मचारी का पूरा नाम *",
+                schoolName: "सेंट अग्रसेन हाई स्कूल",
+                centreNumber: "केंद्र क्रमांक 6118"
             },
             marathi: {
                 headerLine1: "महाराष्ट्र माध्यमिक आणि उच्च माध्यमिक शिक्षा मंडळ,",
                 headerLine2: "मुंबई विभाग मंडळ, वाशी, नवी मुंबई-400 703.",
                 certTitle: "प्रशंसापत्र",
                 presentedTo: "गर्वाने सादर केले जात आहे",
-                recognitionText: "हा प्रमाणपत्र आपणांना सेंट अग्रसेन हायस्कूल (केंद्र क्रमांक ६११) येथे महाराष्ट्र राज्य मंडळाद्वारा आयोजित माध्यमिक शालांत प्रमाणपत्र परीक्षा फेब्रुवारी–मार्च २०२६ च्या यशस्वी आयोजनात केलेल्या आपल्या मोलाच्या योगदान व समर्पित प्रयत्नांबद्दल प्रदान करण्यात येत आहे। आपली मेहनत, शिस्त व निष्ठा कौतुकास्पद आहे।",
+                recognitionText: "हा प्रमाणपत्र महाराष्ट्र राज्य माध्यमिक व उच्च माध्यमिक शिक्षण मंडळाद्वारा आयोजित माध्यमिक शालांत प्रमाणपत्र परीक्षा फेब्रुवारी–मार्च २०२६ च्या यशस्वी आयोजनात आपल्या मोलाच्या योगदान व समर्पित प्रयत्नांबद्दल प्रदान करण्यात येत आहे। आपली मेहनत, शिस्त व निष्ठा कौतुकास्पद आहे।",
                 dateLabel: "दिनांक",
-                principalTitle: "मुख्य संचालक"
+                principalTitle: "मुख्य संचालक",
+                staffNameLabel: "कर्मचारीचे पूर्ण नाव *",
+                schoolName: "सेंट अग्रसेन हायस्कूल",
+                centreNumber: "केंद्र क्र. 6118"
             }
         };
 
@@ -1115,10 +1185,37 @@
             document.getElementById('recognitionText').innerHTML = trans.recognitionText;
             document.getElementById('dateLabel').textContent = trans.dateLabel;
             document.getElementById('principalTitle').textContent = trans.principalTitle;
+            document.getElementById('staffNameLabel').textContent = trans.staffNameLabel;
+            document.getElementById('certStaffName').setAttribute('data-lang', language);
+            
+            // Update school info
+            const schoolInfoDiv = document.getElementById('schoolInfo');
+            schoolInfoDiv.setAttribute('data-lang', language);
+            const schoolLines = schoolInfoDiv.querySelectorAll('div');
+            if (schoolLines.length >= 2) {
+                schoolLines[0].textContent = trans.schoolName;
+                schoolLines[1].textContent = trans.centreNumber;
+            }
         }
 
         // Set today's date as default
         document.getElementById('dateIssued').valueAsDate = new Date();
+
+        // Photo upload handler
+        document.getElementById('staffPhotoInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const preview = document.getElementById('staffPhotoPreview');
+                    preview.src = event.target.result;
+                    preview.classList.add('show');
+                    // Also update the certificate header photo
+                    document.getElementById('staffPhoto').src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
 
         // Language selector event listener
         document.getElementById('language').addEventListener('change', function(e) {
@@ -1133,8 +1230,9 @@
             const staffName = document.getElementById('staffName').value;
             const dateIssued = document.getElementById('dateIssued').value;
             const principalName = document.getElementById('principalName').value;
+            const selectedLanguage = document.getElementById('language').value;
 
-            // Populate certificate fields
+            // Populate certificate fields - keep name in English
             document.getElementById('certStaffName').textContent = staffName;
 
             // Format date
@@ -1152,7 +1250,6 @@
             }
 
             // Update certificate language before showing
-            const selectedLanguage = document.getElementById('language').value;
             updateCertificateLanguage(selectedLanguage);
 
             // Show certificate, hide form
@@ -1174,7 +1271,7 @@
             const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
             
             if (isMobile) {
-                // For mobile devices, download PDF
+                // For mobile devices, always download PDF
                 downloadCertificate();
             } else {
                 // For desktop, open print dialog
@@ -1189,12 +1286,13 @@
             
             const certificateElement = document.getElementById('certificate');
             
+            // Always use A4 landscape for downloads
             const options = {
                 margin: 10,
                 filename: fileName,
                 image: { type: 'jpeg', quality: 0.98 },
                 html2canvas: { scale: 2 },
-                jsPDF: { orientation: 'landscape', unit: 'mm', format: 'a4' }
+                jsPDF: { orientation: 'landscape', unit: 'mm', format: 'A4' }
             };
             
             // Create a clone to avoid affecting the original
