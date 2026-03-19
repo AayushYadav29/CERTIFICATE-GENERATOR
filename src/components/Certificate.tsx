@@ -419,32 +419,32 @@ const Certificate = forwardRef<HTMLDivElement, CertificateProps>(
             </div>
             <div style={{ flex:1, textAlign:'center', paddingRight:'90px' }}>
               <div style={{
-                fontSize:'17px',
-                fontWeight:'700',
+                fontSize:'19px',
+                fontWeight:'800',
                 color:'#0d9488',
                 margin:'0 0 3px 0',
                 lineHeight:'1.4',
-                letterSpacing:'1px',
+                letterSpacing:'1.2px',
                 fontFamily:"'Cinzel', serif",
                 textTransform:'uppercase',
               }}>
                 M. S. Board Of Secondary And
               </div>
               <div style={{
-                fontSize:'17px',
-                fontWeight:'700',
+                fontSize:'19px',
+                fontWeight:'800',
                 color:'#0d9488',
                 margin:'0 0 4px 0',
                 lineHeight:'1.4',
-                letterSpacing:'1px',
+                letterSpacing:'1.2px',
                 fontFamily:"'Cinzel', serif",
                 textTransform:'uppercase',
               }}>
                 Higher Secondary Education
               </div>
               <div style={{
-                fontSize:'13.5px',
-                fontWeight:'500',
+                fontSize:'14.5px',
+                fontWeight:'600',
                 color:'#115e59',
                 margin:0,
                 lineHeight:'1.5',
@@ -488,10 +488,10 @@ const Certificate = forwardRef<HTMLDivElement, CertificateProps>(
                 ✦ &nbsp; This is to certify that &nbsp; ✦
               </div>
               <h2 style={{
-                fontSize:'33px',
+                fontSize:'36px',
                 fontWeight:'900',
                 color:'#0d9488',
-                letterSpacing:'4px',
+                letterSpacing:'5px',
                 margin:'0',
                 textTransform:'uppercase',
                 fontFamily:"'Cinzel Decorative', serif",
@@ -501,10 +501,10 @@ const Certificate = forwardRef<HTMLDivElement, CertificateProps>(
                 Certificate
               </h2>
               <h2 style={{
-                fontSize:'22px',
-                fontWeight:'700',
+                fontSize:'24px',
+                fontWeight:'800',
                 color:'#086056',
-                letterSpacing:'9px',
+                letterSpacing:'10px',
                 margin:'0 0 2px 0',
                 textTransform:'uppercase',
                 fontFamily:"'Cinzel', serif",
@@ -580,13 +580,14 @@ const Certificate = forwardRef<HTMLDivElement, CertificateProps>(
           <div style={{ textAlign:'center', margin:'12px 0 6px 0' }}>
             {/* Presented To label */}
             <div style={{
-              fontSize:'11px',
-              letterSpacing:'5px',
+              fontSize:'13px',
+              fontWeight:'700',
+              letterSpacing:'6px',
               color:'#14b8a6',
               fontFamily:"'Cinzel', serif",
               textTransform:'uppercase',
               marginBottom:'4px',
-              opacity:0.9,
+              opacity:0.95,
             }}>
               Presented To
             </div>
@@ -602,8 +603,8 @@ const Certificate = forwardRef<HTMLDivElement, CertificateProps>(
                 <path d="M5,10 Q15,14 26,18" fill="none" stroke="#14b8a6" strokeWidth="0.8"/>
               </svg>
               <p style={{
-                fontSize:'28px',
-                fontWeight:'700',
+                fontSize:'32px',
+                fontWeight:'800',
                 color:'#0a4f47',
                 margin:0,
                 letterSpacing:'2px',
@@ -643,15 +644,15 @@ const Certificate = forwardRef<HTMLDivElement, CertificateProps>(
               fontFamily:'Georgia, serif', fontWeight:'bold',
             }}>"</div>
             <p style={{
-              fontSize:'14.5px',
-              lineHeight:'2.0',
-              color:'#1a2e2b',
+              fontSize:'16px',
+              lineHeight:'1.9',
+              color:'#0a2622',
               margin:0,
               textAlign:'justify',
               textIndent:'40px',
               fontFamily:"'Cormorant Garamond', serif",
-              fontWeight:'500',
-              letterSpacing:'0.3px',
+              fontWeight:'700',
+              letterSpacing:'0.4px',
             }}>
               This certificate is presented in recognition of your valuable contribution and dedicated efforts in the successful conduct of the Secondary School Certificate Examination, February‑March 2026, organized by the Maharashtra State Board of Secondary and Higher Secondary Education. Your diligence, discipline, and commitment are highly commendable.
             </p>
@@ -678,20 +679,21 @@ const Certificate = forwardRef<HTMLDivElement, CertificateProps>(
             {/* Date */}
             <div style={{ textAlign:'left' }}>
               <div style={{
-                fontSize:'10px',
-                letterSpacing:'4px',
+                fontSize:'12px',
+                fontWeight:'700',
+                letterSpacing:'5px',
                 color:'#14b8a6',
                 fontFamily:"'Cinzel', serif",
                 textTransform:'uppercase',
                 marginBottom:'4px',
-                opacity:0.85,
+                opacity:0.95,
               }}>
                 Date
               </div>
               <div style={{
-                fontSize:'15px',
+                fontSize:'17px',
                 color:'#0a4f47',
-                fontWeight:'600',
+                fontWeight:'700',
                 fontFamily:"'Playfair Display', serif",
                 paddingBottom:'3px',
                 borderBottom:'2px solid #0d9488',
@@ -725,20 +727,21 @@ const Certificate = forwardRef<HTMLDivElement, CertificateProps>(
               />
               <div style={{ width:'220px', height:'1.5px', background:'linear-gradient(90deg, transparent, #0d9488, transparent)', margin:'0 auto 5px auto' }}/>
               <div style={{
-                fontSize:'10px',
-                letterSpacing:'4px',
+                fontSize:'12px',
+                fontWeight:'700',
+                letterSpacing:'5px',
                 color:'#14b8a6',
                 fontFamily:"'Cinzel', serif",
                 textTransform:'uppercase',
                 marginBottom:'3px',
-                opacity:0.85,
+                opacity:0.95,
               }}>
                 Chief Conductor
               </div>
               <div style={{
-                fontSize:'15.5px',
+                fontSize:'18px',
                 color:'#0a4f47',
-                fontWeight:'700',
+                fontWeight:'800',
                 fontFamily:"'Playfair Display', serif",
                 margin:'0 0 3px 0',
                 letterSpacing:'0.3px',
@@ -746,22 +749,22 @@ const Certificate = forwardRef<HTMLDivElement, CertificateProps>(
                 Mr. Dinesh Dayaram Yadav
               </div>
               <div style={{
-                fontSize:'12px',
-                color:'#374151',
+                fontSize:'14px',
+                color:'#1a2e2b',
                 fontFamily:"'Cormorant Garamond', serif",
-                fontWeight:'500',
+                fontWeight:'700',
                 margin:'0 0 2px 0',
-                letterSpacing:'0.3px',
+                letterSpacing:'0.4px',
               }}>
                 Centre No 6118
               </div>
               <div style={{
-                fontSize:'11.5px',
-                color:'#4b5563',
+                fontSize:'13.5px',
+                color:'#1a2e2b',
                 fontFamily:"'Cormorant Garamond', serif",
-                fontWeight:'500',
+                fontWeight:'700',
                 margin:0,
-                letterSpacing:'0.2px',
+                letterSpacing:'0.3px',
               }}>
                 St. Agrasen High School Kalwa East Thane 400605
               </div>
