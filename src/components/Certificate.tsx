@@ -85,6 +85,51 @@ const CORNER_TR_SVG = `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http
   <circle cx="122" cy="80" r="2" fill="#0d9488"/>
 </svg>`)}`;
 
+// Side decoration as data URI for better html2canvas support
+const SIDE_DECORATION_SVG = `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 600" width="25" height="600">
+  <line x1="15" y1="0" x2="15" y2="600" stroke="#0d9488" stroke-width="1.5" stroke-opacity="0.3"/>
+  <circle cx="15" cy="25" r="4" fill="#0d9488" fill-opacity="0.35"/><circle cx="15" cy="25" r="2" fill="#c9a227" fill-opacity="0.5"/>
+  <circle cx="15" cy="75" r="3" fill="#0d9488" fill-opacity="0.35"/><circle cx="15" cy="75" r="1.5" fill="#c9a227" fill-opacity="0.5"/>
+  <circle cx="15" cy="75" r="6" fill="#14b8a6" fill-opacity="0.4"/><circle cx="15" cy="75" r="3.5" fill="#0d9488" fill-opacity="0.5"/><circle cx="15" cy="75" r="1.5" fill="#c9a227"/>
+  <circle cx="15" cy="125" r="4" fill="#0d9488" fill-opacity="0.35"/><circle cx="15" cy="125" r="2" fill="#c9a227" fill-opacity="0.5"/>
+  <circle cx="15" cy="175" r="3" fill="#0d9488" fill-opacity="0.35"/><circle cx="15" cy="175" r="1.5" fill="#c9a227" fill-opacity="0.5"/>
+  <circle cx="15" cy="225" r="4" fill="#0d9488" fill-opacity="0.35"/><circle cx="15" cy="225" r="2" fill="#c9a227" fill-opacity="0.5"/>
+  <circle cx="15" cy="225" r="6" fill="#14b8a6" fill-opacity="0.4"/><circle cx="15" cy="225" r="3.5" fill="#0d9488" fill-opacity="0.5"/><circle cx="15" cy="225" r="1.5" fill="#c9a227"/>
+  <circle cx="15" cy="275" r="3" fill="#0d9488" fill-opacity="0.35"/><circle cx="15" cy="275" r="1.5" fill="#c9a227" fill-opacity="0.5"/>
+  <circle cx="15" cy="325" r="4" fill="#0d9488" fill-opacity="0.35"/><circle cx="15" cy="325" r="2" fill="#c9a227" fill-opacity="0.5"/>
+  <circle cx="15" cy="375" r="3" fill="#0d9488" fill-opacity="0.35"/><circle cx="15" cy="375" r="1.5" fill="#c9a227" fill-opacity="0.5"/>
+  <circle cx="15" cy="375" r="6" fill="#14b8a6" fill-opacity="0.4"/><circle cx="15" cy="375" r="3.5" fill="#0d9488" fill-opacity="0.5"/><circle cx="15" cy="375" r="1.5" fill="#c9a227"/>
+  <circle cx="15" cy="425" r="4" fill="#0d9488" fill-opacity="0.35"/><circle cx="15" cy="425" r="2" fill="#c9a227" fill-opacity="0.5"/>
+  <circle cx="15" cy="475" r="3" fill="#0d9488" fill-opacity="0.35"/><circle cx="15" cy="475" r="1.5" fill="#c9a227" fill-opacity="0.5"/>
+  <circle cx="15" cy="525" r="4" fill="#0d9488" fill-opacity="0.35"/><circle cx="15" cy="525" r="2" fill="#c9a227" fill-opacity="0.5"/>
+  <circle cx="15" cy="525" r="6" fill="#14b8a6" fill-opacity="0.4"/><circle cx="15" cy="525" r="3.5" fill="#0d9488" fill-opacity="0.5"/><circle cx="15" cy="525" r="1.5" fill="#c9a227"/>
+  <circle cx="15" cy="575" r="3" fill="#0d9488" fill-opacity="0.35"/><circle cx="15" cy="575" r="1.5" fill="#c9a227" fill-opacity="0.5"/>
+</svg>`)}`;
+
+// Watermark seal as data URI
+const WATERMARK_SVG = `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 350 350" width="350" height="350">
+  <circle cx="175" cy="175" r="160" fill="none" stroke="#0d9488" stroke-width="2"/>
+  <circle cx="175" cy="175" r="140" fill="none" stroke="#0d9488" stroke-width="1.5"/>
+  <circle cx="175" cy="175" r="120" fill="none" stroke="#0d9488" stroke-width="1"/>
+  <circle cx="175" cy="175" r="100" fill="none" stroke="#0d9488" stroke-width="1.5"/>
+  <circle cx="175" cy="175" r="80" fill="none" stroke="#0d9488" stroke-width="1"/>
+  <circle cx="175" cy="175" r="60" fill="none" stroke="#0d9488" stroke-width="1.5"/>
+  <circle cx="175" cy="175" r="40" fill="#0d9488"/>
+  <circle cx="175" cy="175" r="22" fill="none" stroke="#faf8f0" stroke-width="3"/>
+  <circle cx="325" cy="175" r="8" fill="#0d9488"/>
+  <circle cx="304.9" cy="87.5" r="8" fill="#0d9488"/>
+  <circle cx="245.49" cy="26.68" r="8" fill="#0d9488"/>
+  <circle cx="175" cy="25" r="8" fill="#0d9488"/>
+  <circle cx="104.5" cy="26.68" r="8" fill="#0d9488"/>
+  <circle cx="45.1" cy="87.5" r="8" fill="#0d9488"/>
+  <circle cx="25" cy="175" r="8" fill="#0d9488"/>
+  <circle cx="45.1" cy="262.5" r="8" fill="#0d9488"/>
+  <circle cx="104.5" cy="323.32" r="8" fill="#0d9488"/>
+  <circle cx="175" cy="325" r="8" fill="#0d9488"/>
+  <circle cx="245.49" cy="323.32" r="8" fill="#0d9488"/>
+  <circle cx="304.9" cy="262.5" r="8" fill="#0d9488"/>
+</svg>`)}`;
+
 // ─── Premium Art Deco Style Corner (No transforms - html2canvas compatible) ───
 const ArtDecoCorner = ({ position }: { position: 'tl' | 'tr' | 'bl' | 'br' }) => {
   // For corners with right/bottom positioning, use img elements for better html2canvas support
@@ -281,40 +326,21 @@ const GuillocheBorder = () => (
   </svg>
 );
 
-// ─── Simple Side Decoration (No transforms - html2canvas compatible) ───
+// ─── Simple Side Decoration (using img for html2canvas compatibility) ───
 const SimpleSideDecoration = ({ side }: { side: 'left' | 'right' }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 30 600"
+  <img
+    src={SIDE_DECORATION_SVG}
+    alt=""
     width="25"
     height="600"
+    crossOrigin="anonymous"
     style={{
       position: 'absolute',
       [side]: '35px',
       top: '260px',
       pointerEvents: 'none',
     }}
-  >
-    {/* Simple vertical line with dots - no transforms */}
-    <line x1="15" y1="0" x2="15" y2="600" stroke="#0d9488" strokeWidth="1.5" strokeOpacity="0.3"/>
-
-    {/* Decorative dots along the line */}
-    {[0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550].map((y, i) => (
-      <g key={y}>
-        <circle cx="15" cy={y + 25} r={i % 2 === 0 ? 4 : 3} fill="#0d9488" fillOpacity="0.35"/>
-        <circle cx="15" cy={y + 25} r={i % 2 === 0 ? 2 : 1.5} fill="#c9a227" fillOpacity="0.5"/>
-      </g>
-    ))}
-
-    {/* Small flowers at intervals */}
-    {[75, 225, 375, 525].map((y) => (
-      <g key={`f${y}`}>
-        <circle cx="15" cy={y} r="6" fill="#14b8a6" fillOpacity="0.4"/>
-        <circle cx="15" cy={y} r="3.5" fill="#0d9488" fillOpacity="0.5"/>
-        <circle cx="15" cy={y} r="1.5" fill="#c9a227"/>
-      </g>
-    ))}
-  </svg>
+  />
 );
 
 // ─── Royal Floral Header Banner ───
@@ -444,13 +470,14 @@ const RoyalFloralBanner = () => (
   </svg>
 );
 
-// ─── Watermark Seal (simplified - no transforms) ───
+// ─── Watermark Seal (using img for html2canvas compatibility) ───
 const WatermarkSeal = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 350 350"
+  <img
+    src={WATERMARK_SVG}
+    alt=""
     width="350"
     height="350"
+    crossOrigin="anonymous"
     style={{
       position: 'absolute',
       left: '222px',
@@ -458,25 +485,7 @@ const WatermarkSeal = () => (
       pointerEvents: 'none',
       opacity: 0.04,
     }}
-  >
-    {/* Simplified watermark using only circles */}
-    <circle cx="175" cy="175" r="160" fill="none" stroke="#0d9488" strokeWidth="2"/>
-    <circle cx="175" cy="175" r="140" fill="none" stroke="#0d9488" strokeWidth="1.5"/>
-    <circle cx="175" cy="175" r="120" fill="none" stroke="#0d9488" strokeWidth="1"/>
-    <circle cx="175" cy="175" r="100" fill="none" stroke="#0d9488" strokeWidth="1.5"/>
-    <circle cx="175" cy="175" r="80" fill="none" stroke="#0d9488" strokeWidth="1"/>
-    <circle cx="175" cy="175" r="60" fill="none" stroke="#0d9488" strokeWidth="1.5"/>
-    <circle cx="175" cy="175" r="40" fill="#0d9488"/>
-    <circle cx="175" cy="175" r="22" fill="none" stroke="#faf8f0" strokeWidth="3"/>
-
-    {/* Dots around the outer ring */}
-    {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((angle, i) => {
-      const rad = (angle * Math.PI) / 180;
-      const cx = 175 + Math.cos(rad) * 150;
-      const cy = 175 + Math.sin(rad) * 150;
-      return <circle key={i} cx={cx} cy={cy} r="8" fill="#0d9488"/>;
-    })}
-  </svg>
+  />
 );
 
 // ─── Elegant Divider ───
