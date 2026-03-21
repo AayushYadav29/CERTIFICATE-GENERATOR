@@ -54,25 +54,68 @@ function App() {
   const captureCanvas = async () => {
     const el = certificateRef.current!;
     const wrapper = el.closest('.cert-wrapper') as HTMLElement;
-    
+
     // Temporarily remove transform to ensure html2canvas captures full resolution without cutoff
     if (wrapper) {
       wrapper.setAttribute('data-exporting', 'true');
     }
-    
+
     try {
-      // Add a small delay for CSS to apply
-      await new Promise(resolve => setTimeout(resolve, 50));
-      
+      // Add a longer delay for all styles and images to load
+      await new Promise(resolve => setTimeout(resolve, 150));
+
       return await html2canvas(el, {
-        scale: 3,
+        scale: 4, // Higher scale for better quality
         useCORS: true,
         allowTaint: true,
-        backgroundColor: '#ffffff',
+        backgroundColor: '#fdfcf8', // Match the certificate background
         width: 794,
         height: 1123,
         logging: false,
-        windowWidth: 794,
+        windowWidth: 850, // Slightly larger to ensure edge elements are captured
+        windowHeight: 1200, // Slightly larger to ensure bottom elements are captured
+        x: 0,
+        y: 0,
+        scrollX: 0,
+        scrollY: 0,
+        imageTimeout: 15000, // Give more time for images to load
+        onclone: (clonedDoc) => {
+          // Ensure all SVG elements are properly rendered
+          const svgs = clonedDoc.querySelectorAll('svg');
+          svgs.forEach(svg => {
+            // Ensure SVG has proper namespace and dimensions
+            if (!svg.getAttribute('xmlns')) {
+              svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+            }
+            // Ensure SVGs are visible
+            svg.style.overflow = 'visible';
+          });
+
+          // Force all elements to use exact colors (no transparency issues)
+          const certificate = clonedDoc.getElementById('certificate');
+          if (certificate) {
+            certificate.style.background = '#fdfcf8';
+            // Remove overflow hidden to ensure corner elements are captured
+            certificate.style.overflow = 'visible';
+
+            // Ensure top-left corner SVG is properly rendered (only tl uses inline SVG now)
+            const tlSvg = certificate.querySelector('svg[data-corner="tl"]') as HTMLElement;
+            if (tlSvg) {
+              tlSvg.style.width = '135px';
+              tlSvg.style.height = '135px';
+              tlSvg.style.overflow = 'visible';
+              tlSvg.style.zIndex = '10';
+            }
+
+            // Ensure corner images (tr, bl, br) are properly positioned
+            const cornerImgs = certificate.querySelectorAll('img[width="135"][height="135"]');
+            cornerImgs.forEach((img) => {
+              const imgEl = img as HTMLElement;
+              imgEl.style.zIndex = '10';
+              imgEl.style.position = 'absolute';
+            });
+          }
+        },
       });
     } finally {
       // Restore the transform after capture

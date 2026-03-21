@@ -184,3 +184,31 @@ input[type="range"]::-webkit-slider-thumb:hover {
   -webkit-print-color-adjust: exact !important;
   print-color-adjust: exact !important;
 }
+
+/* Ensure SVGs render properly in html2canvas */
+#certificate svg {
+  overflow: visible !important;
+}
+
+#certificate svg * {
+  vector-effect: non-scaling-stroke;
+}
+
+/* Ensure corner decorations are visible during export */
+#certificate svg[viewBox="0 0 135 135"] {
+  overflow: visible !important;
+  z-index: 10;
+}
+
+/* Background patterns for certificate */
+#certificate {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+/* Ensure fonts are crisp */
+#certificate {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

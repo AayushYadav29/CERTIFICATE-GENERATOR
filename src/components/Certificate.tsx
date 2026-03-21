@@ -14,344 +14,514 @@ const LOGO_FALLBACK = `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http
   <text x="60" y="56" text-anchor="middle" font-size="8" fill="#0d9488" font-family="serif">BOARD</text>
   <text x="60" y="68" text-anchor="middle" font-size="6.5" fill="#115e59" font-family="serif">SSC &amp; HSC</text>
   <text x="60" y="80" text-anchor="middle" font-size="5.5" fill="#0d9488" font-family="serif">MAHARASHTRA</text>
-  <path d="M30,88 Q60,100 90,88" fill="none" stroke="#0d9488" stroke-width="1.5"/>
-  <path d="M40,25 Q60,15 80,25" fill="none" stroke="#0d9488" stroke-width="1"/>
 </svg>`)}`;
 
 const SIGNATURE_FALLBACK = `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 70">
   <path d="M15,50 Q35,15 55,40 Q65,52 85,22 Q95,8 108,35 Q118,54 138,28 Q150,14 168,38 Q178,52 200,32" fill="none" stroke="#0a4f47" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M80,50 Q100,42 115,50" fill="none" stroke="#0a4f47" stroke-width="1.2" stroke-linecap="round"/>
-  <line x1="15" y1="58" x2="205" y2="58" stroke="#0d9488" stroke-width="0.5" opacity="0.4"/>
 </svg>`)}`;
 
-// ─── SVG Decorative Components ───────────────────────────────────────────────
+// ─── Bottom Corner SVGs as Data URIs (better html2canvas support) ───
+const CORNER_BL_SVG = `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 135 135" width="135" height="135">
+  <circle cx="30" cy="105" r="18" fill="#faf8f0" stroke="#c9a227" stroke-width="1.5"/>
+  <circle cx="30" cy="105" r="14" fill="none" stroke="#0d9488" stroke-width="1"/>
+  <circle cx="30" cy="105" r="10" fill="none" stroke="#c9a227" stroke-width="0.5"/>
+  <circle cx="30" cy="93" r="4" fill="#0d9488"/>
+  <circle cx="38" cy="97" r="3" fill="#14b8a6"/>
+  <circle cx="42" cy="105" r="4" fill="#0d9488"/>
+  <circle cx="38" cy="113" r="3" fill="#14b8a6"/>
+  <circle cx="30" cy="117" r="4" fill="#0d9488"/>
+  <circle cx="22" cy="113" r="3" fill="#14b8a6"/>
+  <circle cx="18" cy="105" r="4" fill="#0d9488"/>
+  <circle cx="22" cy="97" r="3" fill="#14b8a6"/>
+  <circle cx="30" cy="105" r="5" fill="#c9a227"/>
+  <circle cx="30" cy="105" r="3" fill="#faf8f0"/>
+  <circle cx="30" cy="105" r="1.5" fill="#0d9488"/>
+</svg>`)}`;
 
-const CornerOrnament = ({ flip = false, flipY = false }: { flip?: boolean; flipY?: boolean }) => (
+const CORNER_BR_SVG = `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 135 135" width="135" height="135">
+  <circle cx="105" cy="105" r="18" fill="#faf8f0" stroke="#c9a227" stroke-width="1.5"/>
+  <circle cx="105" cy="105" r="14" fill="none" stroke="#0d9488" stroke-width="1"/>
+  <circle cx="105" cy="105" r="10" fill="none" stroke="#c9a227" stroke-width="0.5"/>
+  <circle cx="105" cy="93" r="4" fill="#0d9488"/>
+  <circle cx="113" cy="97" r="3" fill="#14b8a6"/>
+  <circle cx="117" cy="105" r="4" fill="#0d9488"/>
+  <circle cx="113" cy="113" r="3" fill="#14b8a6"/>
+  <circle cx="105" cy="117" r="4" fill="#0d9488"/>
+  <circle cx="97" cy="113" r="3" fill="#14b8a6"/>
+  <circle cx="93" cy="105" r="4" fill="#0d9488"/>
+  <circle cx="97" cy="97" r="3" fill="#14b8a6"/>
+  <circle cx="105" cy="105" r="5" fill="#c9a227"/>
+  <circle cx="105" cy="105" r="3" fill="#faf8f0"/>
+  <circle cx="105" cy="105" r="1.5" fill="#0d9488"/>
+</svg>`)}`;
+
+// Top-right corner as data URI (same issue with right: 0 positioning)
+const CORNER_TR_SVG = `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 135 135" width="135" height="135">
+  <path d="M5,5 C75,5 130,60 130,130" fill="none" stroke="#0d9488" stroke-width="3"/>
+  <path d="M10,10 C73,10 125,62 125,125" fill="none" stroke="#c9a227" stroke-width="1.5"/>
+  <path d="M15,15 C70,15 120,65 120,120" fill="none" stroke="#0d9488" stroke-width="2"/>
+  <path d="M20,20 C67,20 115,68 115,115" fill="none" stroke="#c9a227" stroke-width="0.8"/>
+  <path d="M25,25 C65,25 110,70 110,110" fill="none" stroke="#14b8a6" stroke-width="1"/>
+  <circle cx="93" cy="42" r="28" fill="#faf8f0" stroke="#c9a227" stroke-width="2"/>
+  <circle cx="93" cy="42" r="23" fill="none" stroke="#0d9488" stroke-width="1.5"/>
+  <circle cx="93" cy="42" r="18" fill="none" stroke="#c9a227" stroke-width="0.8"/>
+  <circle cx="93" cy="27" r="6" fill="#0d9488"/>
+  <circle cx="104" cy="31" r="5" fill="#14b8a6"/>
+  <circle cx="108" cy="42" r="6" fill="#0d9488"/>
+  <circle cx="104" cy="53" r="5" fill="#14b8a6"/>
+  <circle cx="93" cy="57" r="6" fill="#0d9488"/>
+  <circle cx="82" cy="53" r="5" fill="#14b8a6"/>
+  <circle cx="78" cy="42" r="6" fill="#0d9488"/>
+  <circle cx="82" cy="31" r="5" fill="#14b8a6"/>
+  <circle cx="93" cy="42" r="9" fill="#c9a227"/>
+  <circle cx="93" cy="42" r="6" fill="#faf8f0"/>
+  <circle cx="93" cy="42" r="3" fill="#0d9488"/>
+  <path d="M67,18 L40,8" stroke="#0d9488" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M117,68 L127,95" stroke="#0d9488" stroke-width="1.5" stroke-linecap="round"/>
+  <circle cx="37" cy="7" r="4" fill="#c9a227"/>
+  <circle cx="128" cy="98" r="4" fill="#c9a227"/>
+  <circle cx="55" cy="13" r="2" fill="#0d9488"/>
+  <circle cx="122" cy="80" r="2" fill="#0d9488"/>
+</svg>`)}`;
+
+// ─── Premium Art Deco Style Corner (No transforms - html2canvas compatible) ───
+const ArtDecoCorner = ({ position }: { position: 'tl' | 'tr' | 'bl' | 'br' }) => {
+  // For corners with right/bottom positioning, use img elements for better html2canvas support
+  if (position === 'bl') {
+    return (
+      <img
+        src={CORNER_BL_SVG}
+        alt=""
+        width="135"
+        height="135"
+        crossOrigin="anonymous"
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          pointerEvents: 'none',
+          zIndex: 10,
+        }}
+      />
+    );
+  }
+
+  if (position === 'br') {
+    return (
+      <img
+        src={CORNER_BR_SVG}
+        alt=""
+        width="135"
+        height="135"
+        crossOrigin="anonymous"
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          right: 0,
+          pointerEvents: 'none',
+          zIndex: 10,
+        }}
+      />
+    );
+  }
+
+  if (position === 'tr') {
+    return (
+      <img
+        src={CORNER_TR_SVG}
+        alt=""
+        width="135"
+        height="135"
+        crossOrigin="anonymous"
+        style={{
+          position: 'absolute',
+          top: 0,
+          right: 0,
+          pointerEvents: 'none',
+          zIndex: 10,
+        }}
+      />
+    );
+  }
+
+  // Top-left corner uses inline SVG (positioned at top: 0, left: 0 - works fine)
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 135 135"
+      width="135"
+      height="135"
+      data-corner={position}
+      style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        pointerEvents: 'none',
+        overflow: 'visible',
+        zIndex: 10,
+      }}
+    >
+      <g>
+        {/* Outer decorative curves */}
+        <path d="M5,130 C5,60 60,5 130,5" fill="none" stroke="#0d9488" strokeWidth="3"/>
+        <path d="M10,125 C10,62 62,10 125,10" fill="none" stroke="#c9a227" strokeWidth="1.5"/>
+        <path d="M15,120 C15,65 65,15 120,15" fill="none" stroke="#0d9488" strokeWidth="2"/>
+        <path d="M20,115 C20,68 68,20 115,20" fill="none" stroke="#c9a227" strokeWidth="0.8"/>
+        <path d="M25,110 C25,70 70,25 110,25" fill="none" stroke="#14b8a6" strokeWidth="1"/>
+
+        {/* Corner medallion */}
+        <circle cx="42" cy="42" r="28" fill="#faf8f0" stroke="#c9a227" strokeWidth="2"/>
+        <circle cx="42" cy="42" r="23" fill="none" stroke="#0d9488" strokeWidth="1.5"/>
+        <circle cx="42" cy="42" r="18" fill="none" stroke="#c9a227" strokeWidth="0.8"/>
+
+        {/* 8-petal flower using ONLY circles - NO transforms */}
+        <circle cx="42" cy="27" r="6" fill="#0d9488"/>
+        <circle cx="53" cy="31" r="5" fill="#14b8a6"/>
+        <circle cx="57" cy="42" r="6" fill="#0d9488"/>
+        <circle cx="53" cy="53" r="5" fill="#14b8a6"/>
+        <circle cx="42" cy="57" r="6" fill="#0d9488"/>
+        <circle cx="31" cy="53" r="5" fill="#14b8a6"/>
+        <circle cx="27" cy="42" r="6" fill="#0d9488"/>
+        <circle cx="31" cy="31" r="5" fill="#14b8a6"/>
+
+        {/* Center jewel */}
+        <circle cx="42" cy="42" r="9" fill="#c9a227"/>
+        <circle cx="42" cy="42" r="6" fill="#faf8f0"/>
+        <circle cx="42" cy="42" r="3" fill="#0d9488"/>
+
+        {/* Decorative spurs */}
+        <path d="M68,18 L95,8" stroke="#0d9488" strokeWidth="1.5" strokeLinecap="round"/>
+        <path d="M18,68 L8,95" stroke="#0d9488" strokeWidth="1.5" strokeLinecap="round"/>
+        <circle cx="98" cy="7" r="4" fill="#c9a227"/>
+        <circle cx="7" cy="98" r="4" fill="#c9a227"/>
+        <circle cx="80" cy="13" r="2" fill="#0d9488"/>
+        <circle cx="13" cy="80" r="2" fill="#0d9488"/>
+      </g>
+    </svg>
+  );
+};
+
+// ─── Elegant Guilloche Border Pattern ───
+const GuillocheBorder = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 160 160"
-    width="140"
-    height="140"
+    viewBox="0 0 794 1123"
+    width="794"
+    height="1123"
     style={{
       position: 'absolute',
-      ...(flip && flipY ? { bottom: 0, right: 0, transform: 'scale(-1,-1)' } :
-        flip ? { top: 0, right: 0, transform: 'scaleX(-1)' } :
-        flipY ? { bottom: 0, left: 0, transform: 'scaleY(-1)' } :
-        { top: 0, left: 0 }),
-      opacity: 0.82,
+      top: 0,
+      left: 0,
       pointerEvents: 'none',
     }}
   >
-    {/* Main corner curves */}
-    <path d="M8,100 Q8,8 100,8" fill="none" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round"/>
-    <path d="M14,100 Q14,14 100,14" fill="none" stroke="#14b8a6" strokeWidth="1.2" strokeLinecap="round" strokeDasharray="4,3"/>
-    <path d="M20,100 Q20,20 100,20" fill="none" stroke="#5eead4" strokeWidth="0.6" strokeLinecap="round"/>
+    {/* Multi-layer borders */}
+    <rect x="4" y="4" width="786" height="1115" fill="none" stroke="#0d9488" strokeWidth="4"/>
+    <rect x="10" y="10" width="774" height="1103" fill="none" stroke="#c9a227" strokeWidth="1.5"/>
+    <rect x="14" y="14" width="766" height="1095" fill="none" stroke="#0d9488" strokeWidth="1"/>
+    <rect x="18" y="18" width="758" height="1087" fill="none" stroke="#c9a227" strokeWidth="2"/>
+    <rect x="23" y="23" width="748" height="1077" fill="none" stroke="#14b8a6" strokeWidth="0.8"/>
+    <rect x="27" y="27" width="740" height="1069" fill="none" stroke="#c9a227" strokeWidth="0.5"/>
 
-    {/* Corner flower cluster */}
-    <g transform="translate(28,28)">
-      {/* Large flower */}
-      <g opacity="0.9">
-        <ellipse cx="0" cy="-13" rx="4.5" ry="8" fill="#0d9488" opacity="0.7"/>
-        <ellipse cx="0" cy="-13" rx="4.5" ry="8" fill="#14b8a6" opacity="0.3" transform="rotate(45,0,0)"/>
-        <ellipse cx="0" cy="-13" rx="4.5" ry="8" fill="#0d9488" opacity="0.5" transform="rotate(90,0,0)"/>
-        <ellipse cx="0" cy="-13" rx="4.5" ry="8" fill="#14b8a6" opacity="0.4" transform="rotate(135,0,0)"/>
-        <ellipse cx="0" cy="-13" rx="4.5" ry="8" fill="#0d9488" opacity="0.6" transform="rotate(180,0,0)"/>
-        <ellipse cx="0" cy="-13" rx="4.5" ry="8" fill="#14b8a6" opacity="0.3" transform="rotate(225,0,0)"/>
-        <ellipse cx="0" cy="-13" rx="4.5" ry="8" fill="#0d9488" opacity="0.5" transform="rotate(270,0,0)"/>
-        <ellipse cx="0" cy="-13" rx="4.5" ry="8" fill="#14b8a6" opacity="0.4" transform="rotate(315,0,0)"/>
-        <circle r="6" fill="#f0fdfa" stroke="#0d9488" strokeWidth="1.2"/>
-        <circle r="3" fill="#0d9488"/>
-      </g>
+    {/* Top center ornament */}
+    <g>
+      <ellipse cx="397" cy="32" rx="55" ry="14" fill="#faf8f0" stroke="#c9a227" strokeWidth="2"/>
+      <ellipse cx="397" cy="32" rx="40" ry="9" fill="none" stroke="#0d9488" strokeWidth="1"/>
+      <circle cx="397" cy="32" r="5" fill="#c9a227"/>
+      <circle cx="355" cy="32" r="3" fill="#0d9488"/>
+      <circle cx="439" cy="32" r="3" fill="#0d9488"/>
+      <circle cx="330" cy="32" r="2" fill="#c9a227"/>
+      <circle cx="464" cy="32" r="2" fill="#c9a227"/>
     </g>
 
-    {/* Small flower 1 */}
-    <g transform="translate(55,22)">
-      <ellipse cx="0" cy="-8" rx="3" ry="5.5" fill="#14b8a6" opacity="0.6" transform="rotate(0,0,0)"/>
-      <ellipse cx="0" cy="-8" rx="3" ry="5.5" fill="#0d9488" opacity="0.5" transform="rotate(60,0,0)"/>
-      <ellipse cx="0" cy="-8" rx="3" ry="5.5" fill="#14b8a6" opacity="0.6" transform="rotate(120,0,0)"/>
-      <ellipse cx="0" cy="-8" rx="3" ry="5.5" fill="#0d9488" opacity="0.5" transform="rotate(180,0,0)"/>
-      <ellipse cx="0" cy="-8" rx="3" ry="5.5" fill="#14b8a6" opacity="0.6" transform="rotate(240,0,0)"/>
-      <ellipse cx="0" cy="-8" rx="3" ry="5.5" fill="#0d9488" opacity="0.5" transform="rotate(300,0,0)"/>
-      <circle r="4" fill="#f0fdfa" stroke="#0d9488" strokeWidth="1"/>
-      <circle r="2" fill="#0d9488" opacity="0.8"/>
+    {/* Bottom center ornament */}
+    <g>
+      <ellipse cx="397" cy="1091" rx="55" ry="14" fill="#faf8f0" stroke="#c9a227" strokeWidth="2"/>
+      <ellipse cx="397" cy="1091" rx="40" ry="9" fill="none" stroke="#0d9488" strokeWidth="1"/>
+      <circle cx="397" cy="1091" r="5" fill="#c9a227"/>
+      <circle cx="355" cy="1091" r="3" fill="#0d9488"/>
+      <circle cx="439" cy="1091" r="3" fill="#0d9488"/>
+      <circle cx="330" cy="1091" r="2" fill="#c9a227"/>
+      <circle cx="464" cy="1091" r="2" fill="#c9a227"/>
     </g>
 
-    {/* Small flower 2 */}
-    <g transform="translate(22,55)">
-      <ellipse cx="0" cy="-8" rx="3" ry="5.5" fill="#0d9488" opacity="0.5" transform="rotate(30,0,0)"/>
-      <ellipse cx="0" cy="-8" rx="3" ry="5.5" fill="#14b8a6" opacity="0.6" transform="rotate(90,0,0)"/>
-      <ellipse cx="0" cy="-8" rx="3" ry="5.5" fill="#0d9488" opacity="0.5" transform="rotate(150,0,0)"/>
-      <ellipse cx="0" cy="-8" rx="3" ry="5.5" fill="#14b8a6" opacity="0.6" transform="rotate(210,0,0)"/>
-      <ellipse cx="0" cy="-8" rx="3" ry="5.5" fill="#0d9488" opacity="0.5" transform="rotate(270,0,0)"/>
-      <ellipse cx="0" cy="-8" rx="3" ry="5.5" fill="#14b8a6" opacity="0.6" transform="rotate(330,0,0)"/>
-      <circle r="4" fill="#f0fdfa" stroke="#0d9488" strokeWidth="1"/>
-      <circle r="2" fill="#0d9488" opacity="0.8"/>
+    {/* Left center ornament */}
+    <g>
+      <ellipse cx="32" cy="561" rx="14" ry="45" fill="#faf8f0" stroke="#c9a227" strokeWidth="2"/>
+      <ellipse cx="32" cy="561" rx="9" ry="32" fill="none" stroke="#0d9488" strokeWidth="1"/>
+      <circle cx="32" cy="561" r="5" fill="#c9a227"/>
+      <circle cx="32" cy="525" r="2.5" fill="#0d9488"/>
+      <circle cx="32" cy="597" r="2.5" fill="#0d9488"/>
     </g>
 
-    {/* Leaf stem from big flower to outer lines */}
-    <path d="M37,37 Q60,55 80,40" fill="none" stroke="#0d9488" strokeWidth="1.2" strokeLinecap="round"/>
-    <path d="M42,48 Q50,38 62,33 Q52,40 44,50Z" fill="#0d9488" opacity="0.22"/>
-    <path d="M55,45 Q63,35 75,32 Q64,38 56,47Z" fill="#14b8a6" opacity="0.18"/>
+    {/* Right center ornament */}
+    <g>
+      <ellipse cx="762" cy="561" rx="14" ry="45" fill="#faf8f0" stroke="#c9a227" strokeWidth="2"/>
+      <ellipse cx="762" cy="561" rx="9" ry="32" fill="none" stroke="#0d9488" strokeWidth="1"/>
+      <circle cx="762" cy="561" r="5" fill="#c9a227"/>
+      <circle cx="762" cy="525" r="2.5" fill="#0d9488"/>
+      <circle cx="762" cy="597" r="2.5" fill="#0d9488"/>
+    </g>
 
-    <path d="M37,37 Q55,60 40,80" fill="none" stroke="#0d9488" strokeWidth="1.2" strokeLinecap="round"/>
-    <path d="M42,52 Q33,60 32,72 Q36,62 45,55Z" fill="#0d9488" opacity="0.22"/>
-    <path d="M40,65 Q31,72 30,82 Q34,73 42,67Z" fill="#14b8a6" opacity="0.18"/>
+    {/* Decorative corner dots */}
+    <circle cx="150" cy="32" r="2" fill="#0d9488"/>
+    <circle cx="200" cy="32" r="1.5" fill="#c9a227"/>
+    <circle cx="250" cy="32" r="2" fill="#0d9488"/>
+    <circle cx="544" cy="32" r="2" fill="#0d9488"/>
+    <circle cx="594" cy="32" r="1.5" fill="#c9a227"/>
+    <circle cx="644" cy="32" r="2" fill="#0d9488"/>
 
-    {/* Mini dot accents */}
-    <circle cx="72" cy="26" r="2.5" fill="#5eead4" opacity="0.5"/>
-    <circle cx="26" cy="72" r="2.5" fill="#5eead4" opacity="0.5"/>
-    <circle cx="85" cy="18" r="1.8" fill="#0d9488" opacity="0.4"/>
-    <circle cx="18" cy="85" r="1.8" fill="#0d9488" opacity="0.4"/>
+    <circle cx="150" cy="1091" r="2" fill="#0d9488"/>
+    <circle cx="200" cy="1091" r="1.5" fill="#c9a227"/>
+    <circle cx="250" cy="1091" r="2" fill="#0d9488"/>
+    <circle cx="544" cy="1091" r="2" fill="#0d9488"/>
+    <circle cx="594" cy="1091" r="1.5" fill="#c9a227"/>
+    <circle cx="644" cy="1091" r="2" fill="#0d9488"/>
   </svg>
 );
 
-const SideVine = ({ side }: { side: 'left' | 'right' }) => (
+// ─── Simple Side Decoration (No transforms - html2canvas compatible) ───
+const SimpleSideDecoration = ({ side }: { side: 'left' | 'right' }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 40 700"
-    width="32"
-    height="860"
+    viewBox="0 0 30 600"
+    width="25"
+    height="600"
     style={{
       position: 'absolute',
-      [side]: '22px',
-      top: '130px',
-      opacity: 0.28,
+      [side]: '35px',
+      top: '260px',
       pointerEvents: 'none',
-      ...(side === 'right' ? { transform: 'scaleX(-1)' } : {}),
     }}
   >
-    {/* Main vine stem */}
-    <path
-      d="M20,0 Q8,70 20,140 Q32,210 20,280 Q8,350 20,420 Q32,490 20,560 Q8,630 20,700"
-      fill="none" stroke="#0d9488" strokeWidth="2" strokeLinecap="round"
-    />
-    {/* Leaves */}
-    {[60, 120, 190, 250, 320, 380, 450, 510, 580, 640].map((y, i) => {
-      const left = i % 2 === 0;
-      const cx = left ? 8 : 32;
-      const rot = left ? -35 : 35;
+    {/* Simple vertical line with dots - no transforms */}
+    <line x1="15" y1="0" x2="15" y2="600" stroke="#0d9488" strokeWidth="1.5" strokeOpacity="0.3"/>
+
+    {/* Decorative dots along the line */}
+    {[0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550].map((y, i) => (
+      <g key={y}>
+        <circle cx="15" cy={y + 25} r={i % 2 === 0 ? 4 : 3} fill="#0d9488" fillOpacity="0.35"/>
+        <circle cx="15" cy={y + 25} r={i % 2 === 0 ? 2 : 1.5} fill="#c9a227" fillOpacity="0.5"/>
+      </g>
+    ))}
+
+    {/* Small flowers at intervals */}
+    {[75, 225, 375, 525].map((y) => (
+      <g key={`f${y}`}>
+        <circle cx="15" cy={y} r="6" fill="#14b8a6" fillOpacity="0.4"/>
+        <circle cx="15" cy={y} r="3.5" fill="#0d9488" fillOpacity="0.5"/>
+        <circle cx="15" cy={y} r="1.5" fill="#c9a227"/>
+      </g>
+    ))}
+  </svg>
+);
+
+// ─── Royal Floral Header Banner ───
+const RoyalFloralBanner = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 650 90" width="100%" height="80" style={{ display: 'block' }}>
+    {/* Left flourish */}
+    <path d="M30,60 Q100,45 170,38 Q230,32 280,32 Q310,32 325,35"
+      fill="none" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round"/>
+    <path d="M30,60 Q100,50 170,44 Q230,38 280,38 Q310,38 325,40"
+      fill="none" stroke="#c9a227" strokeWidth="1" strokeLinecap="round"/>
+
+    {/* Left main flower */}
+    <g>
+      <circle cx="50" cy="55" r="14" fill="#faf8f0" stroke="#c9a227" strokeWidth="2"/>
+      <ellipse cx="50" cy="43" rx="5" ry="8" fill="#0d9488"/>
+      <ellipse cx="62" cy="55" rx="8" ry="5" fill="#0d9488"/>
+      <ellipse cx="50" cy="67" rx="5" ry="8" fill="#0d9488"/>
+      <ellipse cx="38" cy="55" rx="8" ry="5" fill="#0d9488"/>
+      <circle cx="50" cy="55" r="6" fill="#c9a227"/>
+      <circle cx="50" cy="55" r="3" fill="#faf8f0"/>
+    </g>
+
+    {/* Left medium flowers */}
+    <g>
+      <circle cx="110" cy="45" r="10" fill="#faf8f0" stroke="#0d9488" strokeWidth="1.5"/>
+      <ellipse cx="110" cy="37" rx="3.5" ry="6" fill="#14b8a6"/>
+      <ellipse cx="118" cy="45" rx="6" ry="3.5" fill="#14b8a6"/>
+      <ellipse cx="110" cy="53" rx="3.5" ry="6" fill="#14b8a6"/>
+      <ellipse cx="102" cy="45" rx="6" ry="3.5" fill="#14b8a6"/>
+      <circle cx="110" cy="45" r="4" fill="#0d9488"/>
+      <circle cx="110" cy="45" r="2" fill="#c9a227"/>
+    </g>
+
+    <g>
+      <circle cx="170" cy="38" r="8" fill="#faf8f0" stroke="#0d9488" strokeWidth="1"/>
+      <circle cx="170" cy="38" r="4" fill="#14b8a6"/>
+      <circle cx="170" cy="38" r="2" fill="#c9a227"/>
+    </g>
+
+    <g>
+      <circle cx="230" cy="34" r="6" fill="#faf8f0" stroke="#0d9488" strokeWidth="0.8"/>
+      <circle cx="230" cy="34" r="3" fill="#0d9488"/>
+      <circle cx="230" cy="34" r="1.5" fill="#c9a227"/>
+    </g>
+
+    {/* Left leaves */}
+    <path d="M75,52 Q88,42 100,40" fill="none" stroke="#0d9488" strokeWidth="1"/>
+    <path d="M80,48 Q85,40 92,38 Q86,43 82,50Z" fill="#0d9488" fillOpacity="0.5"/>
+    <path d="M130,42 Q145,35 155,34" fill="none" stroke="#14b8a6" strokeWidth="0.8"/>
+    <path d="M135,40 Q142,33 150,32 Q143,36 136,42Z" fill="#14b8a6" fillOpacity="0.4"/>
+
+    {/* Center crown medallion */}
+    <g>
+      <circle cx="325" cy="22" r="20" fill="#faf8f0" stroke="#c9a227" strokeWidth="2.5"/>
+      <circle cx="325" cy="22" r="15" fill="none" stroke="#0d9488" strokeWidth="1.5"/>
+
+      {/* Central star flower - using circles only, no transforms */}
+      <circle cx="325" cy="8" r="5" fill="#0d9488"/>
+      <circle cx="339" cy="22" r="5" fill="#0d9488"/>
+      <circle cx="325" cy="36" r="5" fill="#0d9488"/>
+      <circle cx="311" cy="22" r="5" fill="#0d9488"/>
+      <circle cx="335" cy="12" r="4" fill="#14b8a6"/>
+      <circle cx="335" cy="32" r="4" fill="#14b8a6"/>
+      <circle cx="315" cy="32" r="4" fill="#14b8a6"/>
+      <circle cx="315" cy="12" r="4" fill="#14b8a6"/>
+
+      <circle cx="325" cy="22" r="7" fill="#c9a227"/>
+      <circle cx="325" cy="22" r="4" fill="#faf8f0"/>
+      <circle cx="325" cy="22" r="2" fill="#0d9488"/>
+    </g>
+
+    {/* Side petite flowers */}
+    <circle cx="290" cy="38" r="5" fill="#faf8f0" stroke="#0d9488" strokeWidth="0.8"/>
+    <circle cx="290" cy="38" r="2.5" fill="#14b8a6"/>
+    <circle cx="360" cy="38" r="5" fill="#faf8f0" stroke="#0d9488" strokeWidth="0.8"/>
+    <circle cx="360" cy="38" r="2.5" fill="#14b8a6"/>
+
+    {/* Connecting garland */}
+    <path d="M265,38 Q280,30 290,35" fill="none" stroke="#c9a227" strokeWidth="0.8"/>
+    <path d="M360,35 Q370,30 385,38" fill="none" stroke="#c9a227" strokeWidth="0.8"/>
+
+    {/* Right flourish (mirror) */}
+    <path d="M620,60 Q550,45 480,38 Q420,32 370,32 Q340,32 325,35"
+      fill="none" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round"/>
+    <path d="M620,60 Q550,50 480,44 Q420,38 370,38 Q340,38 325,40"
+      fill="none" stroke="#c9a227" strokeWidth="1" strokeLinecap="round"/>
+
+    {/* Right main flower */}
+    <g>
+      <circle cx="600" cy="55" r="14" fill="#faf8f0" stroke="#c9a227" strokeWidth="2"/>
+      <ellipse cx="600" cy="43" rx="5" ry="8" fill="#0d9488"/>
+      <ellipse cx="612" cy="55" rx="8" ry="5" fill="#0d9488"/>
+      <ellipse cx="600" cy="67" rx="5" ry="8" fill="#0d9488"/>
+      <ellipse cx="588" cy="55" rx="8" ry="5" fill="#0d9488"/>
+      <circle cx="600" cy="55" r="6" fill="#c9a227"/>
+      <circle cx="600" cy="55" r="3" fill="#faf8f0"/>
+    </g>
+
+    {/* Right medium flowers */}
+    <g>
+      <circle cx="540" cy="45" r="10" fill="#faf8f0" stroke="#0d9488" strokeWidth="1.5"/>
+      <ellipse cx="540" cy="37" rx="3.5" ry="6" fill="#14b8a6"/>
+      <ellipse cx="548" cy="45" rx="6" ry="3.5" fill="#14b8a6"/>
+      <ellipse cx="540" cy="53" rx="3.5" ry="6" fill="#14b8a6"/>
+      <ellipse cx="532" cy="45" rx="6" ry="3.5" fill="#14b8a6"/>
+      <circle cx="540" cy="45" r="4" fill="#0d9488"/>
+      <circle cx="540" cy="45" r="2" fill="#c9a227"/>
+    </g>
+
+    <g>
+      <circle cx="480" cy="38" r="8" fill="#faf8f0" stroke="#0d9488" strokeWidth="1"/>
+      <circle cx="480" cy="38" r="4" fill="#14b8a6"/>
+      <circle cx="480" cy="38" r="2" fill="#c9a227"/>
+    </g>
+
+    <g>
+      <circle cx="420" cy="34" r="6" fill="#faf8f0" stroke="#0d9488" strokeWidth="0.8"/>
+      <circle cx="420" cy="34" r="3" fill="#0d9488"/>
+      <circle cx="420" cy="34" r="1.5" fill="#c9a227"/>
+    </g>
+
+    {/* Right leaves */}
+    <path d="M575,52 Q562,42 550,40" fill="none" stroke="#0d9488" strokeWidth="1"/>
+    <path d="M570,48 Q565,40 558,38 Q564,43 568,50Z" fill="#0d9488" fillOpacity="0.5"/>
+    <path d="M520,42 Q505,35 495,34" fill="none" stroke="#14b8a6" strokeWidth="0.8"/>
+    <path d="M515,40 Q508,33 500,32 Q507,36 514,42Z" fill="#14b8a6" fillOpacity="0.4"/>
+  </svg>
+);
+
+// ─── Watermark Seal (simplified - no transforms) ───
+const WatermarkSeal = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 350 350"
+    width="350"
+    height="350"
+    style={{
+      position: 'absolute',
+      left: '222px',
+      top: '387px',
+      pointerEvents: 'none',
+      opacity: 0.04,
+    }}
+  >
+    {/* Simplified watermark using only circles */}
+    <circle cx="175" cy="175" r="160" fill="none" stroke="#0d9488" strokeWidth="2"/>
+    <circle cx="175" cy="175" r="140" fill="none" stroke="#0d9488" strokeWidth="1.5"/>
+    <circle cx="175" cy="175" r="120" fill="none" stroke="#0d9488" strokeWidth="1"/>
+    <circle cx="175" cy="175" r="100" fill="none" stroke="#0d9488" strokeWidth="1.5"/>
+    <circle cx="175" cy="175" r="80" fill="none" stroke="#0d9488" strokeWidth="1"/>
+    <circle cx="175" cy="175" r="60" fill="none" stroke="#0d9488" strokeWidth="1.5"/>
+    <circle cx="175" cy="175" r="40" fill="#0d9488"/>
+    <circle cx="175" cy="175" r="22" fill="none" stroke="#faf8f0" strokeWidth="3"/>
+
+    {/* Dots around the outer ring */}
+    {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((angle, i) => {
+      const rad = (angle * Math.PI) / 180;
+      const cx = 175 + Math.cos(rad) * 150;
+      const cy = 175 + Math.sin(rad) * 150;
+      return <circle key={i} cx={cx} cy={cy} r="8" fill="#0d9488"/>;
+    })}
+  </svg>
+);
+
+// ─── Elegant Divider ───
+const ElegantDivider = ({ width = 500 }: { width?: number }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox={`0 0 ${width} 24`} width={width} height="24" style={{ display: 'block' }}>
+    {/* Main line */}
+    <line x1="0" y1="12" x2={width} y2="12" stroke="#0d9488" strokeWidth="1" strokeOpacity="0.5"/>
+    <line x1={width * 0.1} y1="12" x2={width * 0.9} y2="12" stroke="#c9a227" strokeWidth="0.5"/>
+
+    {/* Center diamond ornament */}
+    <g>
+      <path d={`M${width/2},4 L${width/2 + 8},12 L${width/2},20 L${width/2 - 8},12 Z`} fill="#c9a227"/>
+      <path d={`M${width/2},6 L${width/2 + 6},12 L${width/2},18 L${width/2 - 6},12 Z`} fill="#0d9488"/>
+      <circle cx={width/2} cy="12" r="3" fill="#faf8f0"/>
+      <circle cx={width/2} cy="12" r="1.5" fill="#c9a227"/>
+    </g>
+
+    {/* Side ornaments */}
+    <circle cx={width * 0.25} cy="12" r="3" fill="#0d9488"/>
+    <circle cx={width * 0.25} cy="12" r="1.5" fill="#c9a227"/>
+    <circle cx={width * 0.75} cy="12" r="3" fill="#0d9488"/>
+    <circle cx={width * 0.75} cy="12" r="1.5" fill="#c9a227"/>
+
+    <circle cx={width * 0.15} cy="12" r="2" fill="#c9a227"/>
+    <circle cx={width * 0.85} cy="12" r="2" fill="#c9a227"/>
+  </svg>
+);
+
+// ─── Bottom Seal (no transforms) ───
+const OfficialSeal = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70" width="60" height="60" style={{ display: 'block' }}>
+    {/* Outer dots arranged in a circle - no transforms */}
+    {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((angle, i) => {
+      const rad = (angle * Math.PI) / 180;
+      const cx = 35 + Math.cos(rad) * 26;
+      const cy = 35 + Math.sin(rad) * 26;
       return (
-        <g key={y} transform={`translate(${cx},${y}) rotate(${rot})`}>
-          <ellipse rx="7" ry="16" fill="#0d9488" opacity="0.6"/>
-          <line x1="0" y1="-16" x2="0" y2="16" stroke="#14b8a6" strokeWidth="0.7"/>
-        </g>
+        <circle key={i} cx={cx} cy={cy} r="5" fill="#c9a227" fillOpacity="0.7"/>
       );
     })}
-    {/* Flowers */}
-    {[100, 250, 400, 550].map((y, i) => (
-      <g key={`f${y}`} transform={`translate(${i % 2 === 0 ? 10 : 30},${y})`}>
-        <circle r="6" fill="#14b8a6" opacity="0.5"/>
-        <circle r="3" fill="#0d9488" opacity="0.7"/>
-        <circle r="1.5" fill="#f0fdfa" opacity="0.8"/>
-      </g>
-    ))}
-  </svg>
-);
-
-const FloralBanner = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 160" width="100%" height="auto" style={{ display: 'block', marginBottom: '-8px' }}>
-    {/* ── Left branch ── */}
-    <path d="M15,130 Q80,105 150,80 Q210,60 270,52 Q310,47 345,50"
-      fill="none" stroke="#0d9488" strokeWidth="2.2" strokeLinecap="round"/>
-    {/* Left large leaves */}
-    <path d="M60,115 Q80,88 105,78 Q82,95 65,118Z" fill="#0d9488" opacity="0.35"/>
-    <path d="M105,97 Q125,72 148,62 Q126,77 108,100Z" fill="#14b8a6" opacity="0.3"/>
-    <path d="M150,82 Q168,60 190,52 Q168,67 153,85Z" fill="#0d9488" opacity="0.3"/>
-    <path d="M198,68 Q214,50 232,44 Q214,57 200,71Z" fill="#14b8a6" opacity="0.25"/>
-    <path d="M244,58 Q258,43 272,38 Q258,50 246,61Z" fill="#0d9488" opacity="0.22"/>
-    <path d="M290,52 Q300,40 312,36 Q300,48 291,55Z" fill="#14b8a6" opacity="0.2"/>
-
-    {/* Left under-branch leaves */}
-    <path d="M70,118 Q58,100 48,92 Q60,102 74,120Z" fill="#14b8a6" opacity="0.22"/>
-    <path d="M120,100 Q108,85 100,78 Q110,87 124,102Z" fill="#0d9488" opacity="0.18"/>
-    <path d="M170,84 Q160,70 152,64 Q162,72 174,87Z" fill="#14b8a6" opacity="0.18"/>
-
-    {/* Left large flower */}
-    <g transform="translate(38,122)">
-      <ellipse cx="0" cy="-12" rx="5" ry="9" fill="#0d9488" opacity="0.55"/>
-      <ellipse cx="0" cy="-12" rx="5" ry="9" fill="#14b8a6" opacity="0.4" transform="rotate(45,0,0)"/>
-      <ellipse cx="0" cy="-12" rx="5" ry="9" fill="#0d9488" opacity="0.5" transform="rotate(90,0,0)"/>
-      <ellipse cx="0" cy="-12" rx="5" ry="9" fill="#14b8a6" opacity="0.4" transform="rotate(135,0,0)"/>
-      <ellipse cx="0" cy="-12" rx="5" ry="9" fill="#0d9488" opacity="0.5" transform="rotate(180,0,0)"/>
-      <ellipse cx="0" cy="-12" rx="5" ry="9" fill="#14b8a6" opacity="0.4" transform="rotate(225,0,0)"/>
-      <ellipse cx="0" cy="-12" rx="5" ry="9" fill="#0d9488" opacity="0.5" transform="rotate(270,0,0)"/>
-      <ellipse cx="0" cy="-12" rx="5" ry="9" fill="#14b8a6" opacity="0.4" transform="rotate(315,0,0)"/>
-      <circle r="7" fill="white" stroke="#0d9488" strokeWidth="1.4"/>
-      <circle r="3.5" fill="#0d9488"/>
-    </g>
-    {/* Left mid flowers */}
-    <g transform="translate(120,82)">
-      <ellipse cx="0" cy="-8" rx="3.5" ry="6.5" fill="#0d9488" opacity="0.55" transform="rotate(0,0,0)"/>
-      <ellipse cx="0" cy="-8" rx="3.5" ry="6.5" fill="#14b8a6" opacity="0.4" transform="rotate(60,0,0)"/>
-      <ellipse cx="0" cy="-8" rx="3.5" ry="6.5" fill="#0d9488" opacity="0.5" transform="rotate(120,0,0)"/>
-      <ellipse cx="0" cy="-8" rx="3.5" ry="6.5" fill="#14b8a6" opacity="0.4" transform="rotate(180,0,0)"/>
-      <ellipse cx="0" cy="-8" rx="3.5" ry="6.5" fill="#0d9488" opacity="0.5" transform="rotate(240,0,0)"/>
-      <ellipse cx="0" cy="-8" rx="3.5" ry="6.5" fill="#14b8a6" opacity="0.4" transform="rotate(300,0,0)"/>
-      <circle r="5" fill="white" stroke="#0d9488" strokeWidth="1"/>
-      <circle r="2.5" fill="#0d9488"/>
-    </g>
-    <g transform="translate(195,62)">
-      <ellipse cx="0" cy="-7" rx="3" ry="5.5" fill="#14b8a6" opacity="0.6" transform="rotate(0,0,0)"/>
-      <ellipse cx="0" cy="-7" rx="3" ry="5.5" fill="#0d9488" opacity="0.5" transform="rotate(72,0,0)"/>
-      <ellipse cx="0" cy="-7" rx="3" ry="5.5" fill="#14b8a6" opacity="0.6" transform="rotate(144,0,0)"/>
-      <ellipse cx="0" cy="-7" rx="3" ry="5.5" fill="#0d9488" opacity="0.5" transform="rotate(216,0,0)"/>
-      <ellipse cx="0" cy="-7" rx="3" ry="5.5" fill="#14b8a6" opacity="0.6" transform="rotate(288,0,0)"/>
-      <circle r="4.5" fill="white" stroke="#0d9488" strokeWidth="0.8"/>
-      <circle r="2" fill="#14b8a6"/>
-    </g>
-    <g transform="translate(270,50)">
-      <circle cx="0" cy="-7" r="3" fill="#0d9488" opacity="0.4"/>
-      <circle cx="7" cy="0" r="3" fill="#14b8a6" opacity="0.4"/>
-      <circle cx="0" cy="7" r="3" fill="#0d9488" opacity="0.4"/>
-      <circle cx="-7" cy="0" r="3" fill="#14b8a6" opacity="0.4"/>
-      <circle r="3.5" fill="white" stroke="#0d9488" strokeWidth="0.8"/>
-      <circle r="1.5" fill="#0d9488"/>
-    </g>
-
-    {/* Left small tree */}
-    <g transform="translate(10,140)">
-      <line x1="0" y1="0" x2="0" y2="-32" stroke="#0d9488" strokeWidth="2" strokeLinecap="round"/>
-      <line x1="0" y1="-12" x2="-12" y2="-22" stroke="#0d9488" strokeWidth="1.2" strokeLinecap="round"/>
-      <line x1="0" y1="-20" x2="10" y2="-28" stroke="#0d9488" strokeWidth="1.2" strokeLinecap="round"/>
-      <ellipse cy="-40" rx="14" ry="20" fill="#0d9488" opacity="0.35"/>
-      <ellipse cx="-12" cy="-24" rx="8" ry="12" fill="#14b8a6" opacity="0.3"/>
-      <ellipse cx="10" cy="-30" rx="8" ry="11" fill="#0d9488" opacity="0.3"/>
-    </g>
-
-    {/* ── Right branch (mirror) ── */}
-    <path d="M705,130 Q640,105 570,80 Q510,60 450,52 Q410,47 375,50"
-      fill="none" stroke="#0d9488" strokeWidth="2.2" strokeLinecap="round"/>
-    <path d="M660,115 Q640,88 615,78 Q638,95 655,118Z" fill="#0d9488" opacity="0.35"/>
-    <path d="M615,97 Q595,72 572,62 Q594,77 612,100Z" fill="#14b8a6" opacity="0.3"/>
-    <path d="M570,82 Q552,60 530,52 Q552,67 567,85Z" fill="#0d9488" opacity="0.3"/>
-    <path d="M522,68 Q506,50 488,44 Q506,57 520,71Z" fill="#14b8a6" opacity="0.25"/>
-    <path d="M476,58 Q462,43 448,38 Q462,50 474,61Z" fill="#0d9488" opacity="0.22"/>
-    <path d="M430,52 Q420,40 408,36 Q420,48 429,55Z" fill="#14b8a6" opacity="0.2"/>
-    <path d="M650,118 Q662,100 672,92 Q660,102 646,120Z" fill="#14b8a6" opacity="0.22"/>
-    <path d="M600,100 Q612,85 620,78 Q610,87 596,102Z" fill="#0d9488" opacity="0.18"/>
-    <path d="M550,84 Q560,70 568,64 Q558,72 546,87Z" fill="#14b8a6" opacity="0.18"/>
-
-    {/* Right large flower */}
-    <g transform="translate(682,122)">
-      <ellipse cx="0" cy="-12" rx="5" ry="9" fill="#0d9488" opacity="0.55"/>
-      <ellipse cx="0" cy="-12" rx="5" ry="9" fill="#14b8a6" opacity="0.4" transform="rotate(45,0,0)"/>
-      <ellipse cx="0" cy="-12" rx="5" ry="9" fill="#0d9488" opacity="0.5" transform="rotate(90,0,0)"/>
-      <ellipse cx="0" cy="-12" rx="5" ry="9" fill="#14b8a6" opacity="0.4" transform="rotate(135,0,0)"/>
-      <ellipse cx="0" cy="-12" rx="5" ry="9" fill="#0d9488" opacity="0.5" transform="rotate(180,0,0)"/>
-      <ellipse cx="0" cy="-12" rx="5" ry="9" fill="#14b8a6" opacity="0.4" transform="rotate(225,0,0)"/>
-      <ellipse cx="0" cy="-12" rx="5" ry="9" fill="#0d9488" opacity="0.5" transform="rotate(270,0,0)"/>
-      <ellipse cx="0" cy="-12" rx="5" ry="9" fill="#14b8a6" opacity="0.4" transform="rotate(315,0,0)"/>
-      <circle r="7" fill="white" stroke="#0d9488" strokeWidth="1.4"/>
-      <circle r="3.5" fill="#0d9488"/>
-    </g>
-    <g transform="translate(600,82)">
-      <ellipse cx="0" cy="-8" rx="3.5" ry="6.5" fill="#0d9488" opacity="0.55" transform="rotate(0,0,0)"/>
-      <ellipse cx="0" cy="-8" rx="3.5" ry="6.5" fill="#14b8a6" opacity="0.4" transform="rotate(60,0,0)"/>
-      <ellipse cx="0" cy="-8" rx="3.5" ry="6.5" fill="#0d9488" opacity="0.5" transform="rotate(120,0,0)"/>
-      <ellipse cx="0" cy="-8" rx="3.5" ry="6.5" fill="#14b8a6" opacity="0.4" transform="rotate(180,0,0)"/>
-      <ellipse cx="0" cy="-8" rx="3.5" ry="6.5" fill="#0d9488" opacity="0.5" transform="rotate(240,0,0)"/>
-      <ellipse cx="0" cy="-8" rx="3.5" ry="6.5" fill="#14b8a6" opacity="0.4" transform="rotate(300,0,0)"/>
-      <circle r="5" fill="white" stroke="#0d9488" strokeWidth="1"/>
-      <circle r="2.5" fill="#0d9488"/>
-    </g>
-    <g transform="translate(525,62)">
-      <ellipse cx="0" cy="-7" rx="3" ry="5.5" fill="#14b8a6" opacity="0.6" transform="rotate(0,0,0)"/>
-      <ellipse cx="0" cy="-7" rx="3" ry="5.5" fill="#0d9488" opacity="0.5" transform="rotate(72,0,0)"/>
-      <ellipse cx="0" cy="-7" rx="3" ry="5.5" fill="#14b8a6" opacity="0.6" transform="rotate(144,0,0)"/>
-      <ellipse cx="0" cy="-7" rx="3" ry="5.5" fill="#0d9488" opacity="0.5" transform="rotate(216,0,0)"/>
-      <ellipse cx="0" cy="-7" rx="3" ry="5.5" fill="#14b8a6" opacity="0.6" transform="rotate(288,0,0)"/>
-      <circle r="4.5" fill="white" stroke="#0d9488" strokeWidth="0.8"/>
-      <circle r="2" fill="#14b8a6"/>
-    </g>
-    <g transform="translate(450,50)">
-      <circle cx="0" cy="-7" r="3" fill="#0d9488" opacity="0.4"/>
-      <circle cx="7" cy="0" r="3" fill="#14b8a6" opacity="0.4"/>
-      <circle cx="0" cy="7" r="3" fill="#0d9488" opacity="0.4"/>
-      <circle cx="-7" cy="0" r="3" fill="#14b8a6" opacity="0.4"/>
-      <circle r="3.5" fill="white" stroke="#0d9488" strokeWidth="0.8"/>
-      <circle r="1.5" fill="#0d9488"/>
-    </g>
-
-    {/* Right small tree */}
-    <g transform="translate(710,140)">
-      <line x1="0" y1="0" x2="0" y2="-32" stroke="#0d9488" strokeWidth="2" strokeLinecap="round"/>
-      <line x1="0" y1="-12" x2="12" y2="-22" stroke="#0d9488" strokeWidth="1.2" strokeLinecap="round"/>
-      <line x1="0" y1="-20" x2="-10" y2="-28" stroke="#0d9488" strokeWidth="1.2" strokeLinecap="round"/>
-      <ellipse cy="-40" rx="14" ry="20" fill="#0d9488" opacity="0.35"/>
-      <ellipse cx="12" cy="-24" rx="8" ry="12" fill="#14b8a6" opacity="0.3"/>
-      <ellipse cx="-10" cy="-30" rx="8" ry="11" fill="#0d9488" opacity="0.3"/>
-    </g>
-
-    {/* ── Center crown-like motif ── */}
-    <g transform="translate(360,30)">
-      {/* Center large flower */}
-      <ellipse cx="0" cy="-16" rx="6" ry="11" fill="#0d9488" opacity="0.5"/>
-      <ellipse cx="0" cy="-16" rx="6" ry="11" fill="#14b8a6" opacity="0.35" transform="rotate(45,0,0)"/>
-      <ellipse cx="0" cy="-16" rx="6" ry="11" fill="#0d9488" opacity="0.45" transform="rotate(90,0,0)"/>
-      <ellipse cx="0" cy="-16" rx="6" ry="11" fill="#14b8a6" opacity="0.35" transform="rotate(135,0,0)"/>
-      <ellipse cx="0" cy="-16" rx="6" ry="11" fill="#0d9488" opacity="0.5" transform="rotate(180,0,0)"/>
-      <ellipse cx="0" cy="-16" rx="6" ry="11" fill="#14b8a6" opacity="0.35" transform="rotate(225,0,0)"/>
-      <ellipse cx="0" cy="-16" rx="6" ry="11" fill="#0d9488" opacity="0.45" transform="rotate(270,0,0)"/>
-      <ellipse cx="0" cy="-16" rx="6" ry="11" fill="#14b8a6" opacity="0.35" transform="rotate(315,0,0)"/>
-      <circle r="9" fill="white" stroke="#0d9488" strokeWidth="1.5"/>
-      <circle r="4.5" fill="#0d9488"/>
-      <circle r="2" fill="white"/>
-      {/* Small side flowers */}
-      <g transform="translate(-30,18)">
-        <ellipse cx="0" cy="-7" rx="3" ry="5" fill="#14b8a6" opacity="0.5" transform="rotate(0,0,0)"/>
-        <ellipse cx="0" cy="-7" rx="3" ry="5" fill="#0d9488" opacity="0.4" transform="rotate(72,0,0)"/>
-        <ellipse cx="0" cy="-7" rx="3" ry="5" fill="#14b8a6" opacity="0.5" transform="rotate(144,0,0)"/>
-        <ellipse cx="0" cy="-7" rx="3" ry="5" fill="#0d9488" opacity="0.4" transform="rotate(216,0,0)"/>
-        <ellipse cx="0" cy="-7" rx="3" ry="5" fill="#14b8a6" opacity="0.5" transform="rotate(288,0,0)"/>
-        <circle r="4" fill="white" stroke="#0d9488" strokeWidth="0.8"/>
-        <circle r="2" fill="#0d9488"/>
-      </g>
-      <g transform="translate(30,18)">
-        <ellipse cx="0" cy="-7" rx="3" ry="5" fill="#14b8a6" opacity="0.5" transform="rotate(0,0,0)"/>
-        <ellipse cx="0" cy="-7" rx="3" ry="5" fill="#0d9488" opacity="0.4" transform="rotate(72,0,0)"/>
-        <ellipse cx="0" cy="-7" rx="3" ry="5" fill="#14b8a6" opacity="0.5" transform="rotate(144,0,0)"/>
-        <ellipse cx="0" cy="-7" rx="3" ry="5" fill="#0d9488" opacity="0.4" transform="rotate(216,0,0)"/>
-        <ellipse cx="0" cy="-7" rx="3" ry="5" fill="#14b8a6" opacity="0.5" transform="rotate(288,0,0)"/>
-        <circle r="4" fill="white" stroke="#0d9488" strokeWidth="0.8"/>
-        <circle r="2" fill="#0d9488"/>
-      </g>
-      {/* Center leaf stems */}
-      <path d="M-40,28 Q-25,20 0,18 Q25,20 40,28" fill="none" stroke="#0d9488" strokeWidth="1" strokeLinecap="round"/>
-    </g>
-
-    {/* ── Decorative dots row ── */}
-    {[100, 140, 180, 220, 260, 300, 340, 380, 420, 460, 500, 540, 580, 620].map((x, i) => (
-      <circle key={i} cx={x} cy={148} r={i % 3 === 0 ? 2.5 : 1.5} fill="#0d9488" opacity="0.3"/>
-    ))}
-  </svg>
-);
-
-const WatermarkMandala = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 500 500"
-    width="500"
-    height="500"
-    style={{
-      position: 'absolute',
-      left: '50%',
-      top: '50%',
-      transform: 'translate(-50%, -50%)',
-      opacity: 0.028,
-      pointerEvents: 'none',
-    }}
-  >
-    {[0, 20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300, 320, 340].map((a) => (
-      <ellipse key={a} cx="250" cy="110" rx="22" ry="65" fill="#0d9488" transform={`rotate(${a},250,250)`}/>
-    ))}
-    {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((a) => (
-      <ellipse key={`b${a}`} cx="250" cy="160" rx="14" ry="40" fill="#0d9488" transform={`rotate(${a},250,250)`}/>
-    ))}
-    <circle cx="250" cy="250" r="200" fill="none" stroke="#0d9488" strokeWidth="1.5"/>
-    <circle cx="250" cy="250" r="165" fill="none" stroke="#0d9488" strokeWidth="0.8"/>
-    <circle cx="250" cy="250" r="130" fill="none" stroke="#0d9488" strokeWidth="1.2"/>
-    <circle cx="250" cy="250" r="50" fill="#0d9488"/>
-    <circle cx="250" cy="250" r="28" fill="none" stroke="white" strokeWidth="3"/>
+    <circle cx="35" cy="35" r="20" fill="#faf8f0" stroke="#c9a227" strokeWidth="2"/>
+    <circle cx="35" cy="35" r="15" fill="none" stroke="#0d9488" strokeWidth="1"/>
+    <circle cx="35" cy="35" r="10" fill="#0d9488"/>
+    <circle cx="35" cy="35" r="5" fill="#c9a227"/>
+    <circle cx="35" cy="35" r="2" fill="#faf8f0"/>
   </svg>
 );
 
@@ -368,89 +538,87 @@ const Certificate = forwardRef<HTMLDivElement, CertificateProps>(
           minHeight: '1123px',
           height: '1123px',
           position: 'relative',
-          background: 'linear-gradient(160deg, #fafffd 0%, #f0fdfa 30%, #fafffd 60%, #f5fffe 100%)',
+          background: 'linear-gradient(180deg, #fdfcf8 0%, #faf8f0 30%, #fdfcf8 70%, #faf8f0 100%)',
           overflow: 'hidden',
           boxSizing: 'border-box',
           fontFamily: "'Cormorant Garamond', Georgia, serif",
         }}
       >
-        {/* ── Gold + Teal Multi-layer Borders ── */}
-        <div style={{ position:'absolute', top:'0px', left:'0px', right:'0px', bottom:'0px', border:'6px solid #0d9488', pointerEvents:'none' }}/>
-        <div style={{ position:'absolute', top:'8px', left:'8px', right:'8px', bottom:'8px', border:'1.5px solid #14b8a6', pointerEvents:'none' }}/>
-        <div style={{ position:'absolute', top:'13px', left:'13px', right:'13px', bottom:'13px', border:'0.5px solid #5eead4', pointerEvents:'none' }}/>
-        <div style={{ position:'absolute', top:'16px', left:'16px', right:'16px', bottom:'16px', border:'2px solid #0d9488', pointerEvents:'none' }}/>
-        <div style={{ position:'absolute', top:'20px', left:'20px', right:'20px', bottom:'20px', border:'0.5px solid #99f6e4', pointerEvents:'none' }}/>
-
-        {/* ── Corner Ornaments ── */}
-        <CornerOrnament />
-        <CornerOrnament flip />
-        <CornerOrnament flipY />
-        <CornerOrnament flip flipY />
-
-        {/* ── Side Vine Decorations ── */}
-        <SideVine side="left" />
-        <SideVine side="right" />
-
-        {/* ── Background Watermark ── */}
-        <WatermarkMandala />
-
-        {/* ── Subtle teal background radial glow ── */}
+        {/* Subtle background pattern */}
         <div style={{
-          position:'absolute', top: 0, left: 0, right: 0, bottom: 0, pointerEvents:'none',
-          background:'radial-gradient(ellipse 60% 40% at 50% 50%, rgba(13,148,136,0.04) 0%, transparent 70%)'
+          position: 'absolute',
+          top: 0, left: 0, right: 0, bottom: 0,
+          background: 'radial-gradient(ellipse at 50% 45%, rgba(13,148,136,0.04) 0%, transparent 50%)',
+          pointerEvents: 'none',
         }}/>
+
+        {/* Border Decorations */}
+        <GuillocheBorder />
+
+        {/* Corner Ornaments */}
+        <ArtDecoCorner position="tl" />
+        <ArtDecoCorner position="tr" />
+        <ArtDecoCorner position="bl" />
+        <ArtDecoCorner position="br" />
+
+        {/* Side Decorations */}
+        <SimpleSideDecoration side="left" />
+        <SimpleSideDecoration side="right" />
+
+        {/* Watermark */}
+        <WatermarkSeal />
 
         {/* ════ MAIN CONTENT ════ */}
         <div style={{
-          position:'relative', zIndex:2, padding:'32px 56px 24px 56px',
-          height:'100%', boxSizing:'border-box', display:'flex', flexDirection:'column'
+          position: 'relative', zIndex: 2, padding: '38px 65px 28px 65px',
+          height: '100%', boxSizing: 'border-box', display: 'flex', flexDirection: 'column'
         }}>
 
           {/* ── HEADER ── */}
-          <div style={{ display:'flex', alignItems:'center', gap:'16px', marginBottom:'2px' }}>
-            <div style={{ flexShrink:0, width:'90px', height:'90px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '6px' }}>
+            <div style={{ flexShrink: 0, width: '85px', height: '85px' }}>
               <img
                 src="/logo.png"
                 alt="Board Logo"
-                style={{ width:'90px', height:'90px', objectFit:'contain' }}
+                style={{ width: '85px', height: '85px', objectFit: 'contain' }}
                 crossOrigin="anonymous"
                 onError={(e) => { (e.target as HTMLImageElement).src = LOGO_FALLBACK; }}
               />
             </div>
-            <div style={{ flex:1, textAlign:'center', paddingRight:'50px' }}>
+            <div style={{ flex: 1, textAlign: 'center', paddingRight: '48px' }}>
               <div style={{
-                fontSize:'18.5px',
-                fontWeight:'800',
-                color:'#0d9488',
-                margin:'0 0 3px 0',
-                lineHeight:'1.4',
-                letterSpacing:'1.2px',
-                fontFamily:"'Cinzel', serif",
-                textTransform:'uppercase',
+                fontSize: '17px',
+                fontWeight: 800,
+                color: '#0d9488',
+                margin: '0 0 2px 0',
+                lineHeight: 1.35,
+                letterSpacing: '1.5px',
+                fontFamily: "'Cinzel', serif",
+                textTransform: 'uppercase',
               }}>
-               Maharashtra State Board Of Secondary
+                Maharashtra State Board Of Secondary
               </div>
               <div style={{
-                fontSize:'18px',
-                fontWeight:'800',
-                color:'#0d9488',
-                margin:'0 0 4px 0',
-                lineHeight:'1.4',
-                letterSpacing:'1.2px',
-                fontFamily:"'Cinzel', serif",
-                textTransform:'uppercase',
+                fontSize: '17px',
+                fontWeight: 800,
+                color: '#0d9488',
+                margin: '0 0 4px 0',
+                lineHeight: 1.35,
+                letterSpacing: '1.5px',
+                fontFamily: "'Cinzel', serif",
+                textTransform: 'uppercase',
               }}>
-                and Higher Education
+                and Higher Secondary Education
               </div>
               <div style={{
-                fontSize:'14.5px',
-                fontWeight:'600',
-                color:'#115e59',
-                margin:0,
-                lineHeight:'1.5',
-                letterSpacing:'0.5px',
-                fontFamily:"'Cormorant Garamond', serif",
-                fontStyle:'italic',
+                fontSize: '13.5px',
+                fontWeight: 600,
+                color: '#115e59',
+                margin: 0,
+                lineHeight: 1.5,
+                letterSpacing: '0.5px',
+                fontFamily: "'Cormorant Garamond', serif",
+                fontStyle: 'italic',
               }}>
                 Mumbai Divisional Board, Vashi, Navi Mumbai‑400 703.
               </div>
@@ -458,118 +626,112 @@ const Certificate = forwardRef<HTMLDivElement, CertificateProps>(
           </div>
 
           {/* ── TOP DIVIDER ── */}
-          <div style={{ position:'relative', margin:'8px 0 4px 0', height:'12px', display:'flex', alignItems:'center', justifyContent:'center' }}>
-            <div style={{ position:'absolute', left:0, right:0, height:'1.5px', background:'linear-gradient(90deg, transparent 0%, #0d9488 15%, #14b8a6 50%, #0d9488 85%, transparent 100%)' }}/>
-            <div style={{ position:'relative', zIndex:1, display:'flex', gap:'6px', alignItems:'center' }}>
-              {[-3,-2,-1,0,1,2,3].map(i => (
-                <div key={i} style={{ width: i === 0 ? '7px' : Math.abs(i) === 1 ? '5px' : '4px', height: i === 0 ? '7px' : Math.abs(i) === 1 ? '5px' : '4px', borderRadius:'50%', background:'#0d9488', opacity: 1 - Math.abs(i)*0.12 }}/>
-              ))}
-            </div>
+          <div style={{ display: 'flex', justifyContent: 'center', margin: '6px 0' }}>
+            <ElegantDivider width={580} />
           </div>
 
-          {/* ── CERTIFICATE OF APPRECIATION SECTION ── */}
-          <div style={{ textAlign:'center', position:'relative', margin:'4px 0 8px 0' }}>
-            {/* Floral banner */}
-            <div style={{ opacity:0.75 }}>
-              <FloralBanner />
-            </div>
+          {/* ── CERTIFICATE TITLE SECTION ── */}
+          <div style={{ textAlign: 'center', position: 'relative', margin: '0 0 4px 0' }}>
+            <RoyalFloralBanner />
 
-            {/* Main title */}
-            <div style={{ marginTop: '-2px', marginBottom:'4px' }}>
+            <div style={{ marginTop: '4px', marginBottom: '8px' }}>
               <div style={{
-                fontSize:'11px',
-                letterSpacing:'8px',
-                color:'#14b8a6',
-                fontFamily:"'Cinzel', serif",
-                textTransform:'uppercase',
-                marginBottom:'3px',
-                opacity:0.85,
+                fontSize: '11px',
+                letterSpacing: '8px',
+                color: '#c9a227',
+                fontFamily: "'Cinzel', serif",
+                textTransform: 'uppercase',
+                marginBottom: '5px',
               }}>
                 ✦ &nbsp; This is to certify that &nbsp; ✦
               </div>
               <h2 style={{
-                fontSize:'36px',
-                fontWeight:'900',
-                color:'#0d9488',
-                letterSpacing:'5px',
-                margin:'0',
-                textTransform:'uppercase',
-                fontFamily:"'Cinzel Decorative', serif",
-                textShadow:'none',
-                lineHeight:'1.15',
+                fontSize: '40px',
+                fontWeight: 900,
+                color: '#0d9488',
+                letterSpacing: '7px',
+                margin: '0',
+                textTransform: 'uppercase',
+                fontFamily: "'Cinzel Decorative', serif",
+                lineHeight: 1.15,
               }}>
                 Certificate
               </h2>
               <h2 style={{
-                fontSize:'24px',
-                fontWeight:'800',
-                color:'#086056',
-                letterSpacing:'10px',
-                margin:'0 0 2px 0',
-                textTransform:'uppercase',
-                fontFamily:"'Cinzel', serif",
+                fontSize: '21px',
+                fontWeight: 800,
+                color: '#086056',
+                letterSpacing: '14px',
+                margin: '3px 0 0 0',
+                textTransform: 'uppercase',
+                fontFamily: "'Cinzel', serif",
               }}>
                 of Appreciation
               </h2>
             </div>
 
-            {/* Ornamental rule */}
-            <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:'8px' }}>
-              <div style={{ width:'100px', height:'1px', background:'linear-gradient(90deg,transparent,#0d9488)' }}/>
-              <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28" style={{ display: 'block' }}>
-                <path d="M14,2 Q18,10 18,14 Q18,18 14,26 Q10,18 10,14 Q10,10 14,2Z" fill="#0d9488" opacity="0.4"/>
-                <path d="M2,14 Q10,10 14,10 Q18,10 26,14 Q18,18 14,18 Q10,18 2,14Z" fill="#0d9488" opacity="0.35"/>
-                <circle cx="14" cy="14" r="4" fill="#0d9488" opacity="0.7"/>
-                <circle cx="14" cy="14" r="2" fill="#f0fdfa"/>
+            {/* Ornamental center piece */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
+              <div style={{ width: '90px', height: '2px', background: 'linear-gradient(90deg, transparent, #c9a227)' }}/>
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" style={{ display: 'block' }}>
+                <path d="M16,2 L19,13 L16,11 L13,13 Z" fill="#c9a227"/>
+                <path d="M16,30 L19,19 L16,21 L13,19 Z" fill="#c9a227"/>
+                <path d="M2,16 L13,13 L11,16 L13,19 Z" fill="#c9a227"/>
+                <path d="M30,16 L19,13 L21,16 L19,19 Z" fill="#c9a227"/>
+                <circle cx="16" cy="16" r="6" fill="#0d9488"/>
+                <circle cx="16" cy="16" r="3" fill="#faf8f0"/>
+                <circle cx="16" cy="16" r="1.5" fill="#c9a227"/>
               </svg>
-              <div style={{ width:'100px', height:'1px', background:'linear-gradient(90deg,#0d9488,transparent)' }}/>
+              <div style={{ width: '90px', height: '2px', background: 'linear-gradient(90deg, #c9a227, transparent)' }}/>
             </div>
           </div>
 
-          {/* ── PHOTO + NAME BLOCK ── */}
-          <div style={{ textAlign:'center', margin:'6px 0 4px 0' }}>
-            {/* Photo frame with ornamental border */}
-            <div style={{ display:'inline-block', position:'relative' }}>
-              {/* Outer decorative ring */}
+          {/* ── PHOTO FRAME ── */}
+          <div style={{ textAlign: 'center', margin: '12px 0 8px 0' }}>
+            <div style={{ display: 'inline-block', position: 'relative', padding: '14px' }}>
+              {/* Decorative frame */}
               <div style={{
-                position:'absolute', top:'-8px', left:'-8px', right:'-8px', bottom:'-8px',
-                border:'2px solid #0d9488',
-                borderRadius:'8px',
-                opacity:0.5,
+                position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+                border: '3px solid #c9a227',
+                borderRadius: '6px',
               }}/>
               <div style={{
-                position:'absolute', top:'-4px', left:'-4px', right:'-4px', bottom:'-4px',
-                border:'1px solid #14b8a6',
-                borderRadius:'6px',
-                opacity:0.6,
+                position: 'absolute', top: '5px', left: '5px', right: '5px', bottom: '5px',
+                border: '1.5px solid #0d9488',
+                borderRadius: '4px',
               }}/>
-              {/* Corner pins */}
+
+              {/* Corner jewels */}
               {[
-                { top: '-10px', left: '-10px' },
-                { top: '-10px', right: '-10px' },
-                { bottom: '-10px', left: '-10px' },
-                { bottom: '-10px', right: '-10px' }
-              ].map((pos,i) => (
+                { top: '-6px', left: '-6px' },
+                { top: '-6px', right: '-6px' },
+                { bottom: '-6px', left: '-6px' },
+                { bottom: '-6px', right: '-6px' }
+              ].map((pos, i) => (
                 <div key={i} style={{
-                  position:'absolute', width:'10px', height:'10px',
-                  borderRadius:'50%', background:'#0d9488',
-                  boxShadow:'0 0 0 2px #f0fdfa, 0 0 0 3.5px #0d9488',
+                  position: 'absolute',
                   ...pos,
-                }}/>
+                }}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
+                    <circle cx="7" cy="7" r="6" fill="#c9a227"/>
+                    <circle cx="7" cy="7" r="4" fill="#faf8f0"/>
+                    <circle cx="7" cy="7" r="2" fill="#0d9488"/>
+                  </svg>
+                </div>
               ))}
+
               <div style={{
-                width:'130px',
-                height:'160px',
-                border:'3px solid #0d9488',
-                borderRadius:'4px',
-                overflow:'hidden',
-                background:'#f0fdfa',
-                boxShadow:'0 6px 24px rgba(13,148,136,0.25), inset 0 0 0 1px rgba(20,184,166,0.3)',
+                width: '120px',
+                height: '150px',
+                border: '2px solid #0d9488',
+                borderRadius: '3px',
+                overflow: 'hidden',
+                background: '#faf8f0',
               }}>
                 <img
                   src={staffPhoto}
                   alt="Staff Photo"
-                  style={{ width:'100%', height:'100%', objectFit:'cover' }}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                   crossOrigin="anonymous"
                 />
               </div>
@@ -577,201 +739,218 @@ const Certificate = forwardRef<HTMLDivElement, CertificateProps>(
           </div>
 
           {/* ── STAFF NAME ── */}
-          <div style={{ textAlign:'center', margin:'12px 0 6px 0' }}>
-            {/* Presented To label */}
+          <div style={{ textAlign: 'center', margin: '8px 0' }}>
             <div style={{
-              fontSize:'13px',
-              fontWeight:'700',
-              letterSpacing:'6px',
-              color:'#14b8a6',
-              fontFamily:"'Cinzel', serif",
-              textTransform:'uppercase',
-              marginBottom:'4px',
-              opacity:0.95,
+              fontSize: '11px',
+              fontWeight: 700,
+              letterSpacing: '7px',
+              color: '#c9a227',
+              fontFamily: "'Cinzel', serif",
+              textTransform: 'uppercase',
+              marginBottom: '6px',
             }}>
               Presented To
             </div>
-            <div style={{ display:'inline-block', position:'relative', padding:'2px 36px 8px 36px' }}>
-              {/* left leaf */}
-              <svg xmlns="http://www.w3.org/2000/svg" style={{ position:'absolute', left:'2px', top:'50%', transform:'translateY(-60%)', width:'24px', height:'24px', opacity:0.5 }} viewBox="0 0 30 30">
-                <path d="M28,15 Q18,5 5,10 Q18,10 26,18Z" fill="#0d9488"/>
-                <path d="M5,10 Q15,14 26,18" fill="none" stroke="#14b8a6" strokeWidth="0.8"/>
+            <div style={{ display: 'inline-block', position: 'relative', padding: '4px 45px 12px 45px' }}>
+              {/* Decorative leaves */}
+              <svg xmlns="http://www.w3.org/2000/svg" style={{ position: 'absolute', left: '6px', top: '50%', marginTop: '-8px', width: '30px', height: '18px' }} viewBox="0 0 40 25">
+                <path d="M38,12 Q25,3 8,8 Q22,9 36,17Z" fill="#0d9488"/>
+                <path d="M8,8 Q18,11 36,17" fill="none" stroke="#14b8a6" strokeWidth="0.8"/>
               </svg>
-              {/* right leaf */}
-              <svg xmlns="http://www.w3.org/2000/svg" style={{ position:'absolute', right:'2px', top:'50%', transform:'translateY(-60%) scaleX(-1)', width:'24px', height:'24px', opacity:0.5 }} viewBox="0 0 30 30">
-                <path d="M28,15 Q18,5 5,10 Q18,10 26,18Z" fill="#0d9488"/>
-                <path d="M5,10 Q15,14 26,18" fill="none" stroke="#14b8a6" strokeWidth="0.8"/>
+              <svg xmlns="http://www.w3.org/2000/svg" style={{ position: 'absolute', right: '6px', top: '50%', marginTop: '-8px', width: '30px', height: '18px' }} viewBox="0 0 40 25">
+                <path d="M2,12 Q15,3 32,8 Q18,9 4,17Z" fill="#0d9488"/>
+                <path d="M32,8 Q22,11 4,17" fill="none" stroke="#14b8a6" strokeWidth="0.8"/>
               </svg>
+
               <p style={{
-                fontSize:'32px',
-                fontWeight:'800',
-                color:'#0a4f47',
-                margin:0,
-                letterSpacing:'2px',
-                fontFamily:"'Playfair Display', serif",
-                fontStyle:'italic',
-                textShadow:'0 2px 8px rgba(13,148,136,0.15)',
+                fontSize: '29px',
+                fontWeight: 800,
+                color: '#0a4f47',
+                margin: 0,
+                letterSpacing: '2px',
+                fontFamily: "'Playfair Display', serif",
+                fontStyle: 'italic',
               }}>
                 {staffName}
               </p>
               <div style={{
-                width:'100%', height:'1.5px',
-                background:'linear-gradient(90deg, transparent, #0d9488 20%, #14b8a6 50%, #0d9488 80%, transparent)',
-                marginTop:'4px',
+                width: '100%', height: '2.5px',
+                background: 'linear-gradient(90deg, transparent 0%, #c9a227 15%, #c9a227 85%, transparent 100%)',
+                marginTop: '6px',
               }}/>
             </div>
           </div>
 
-          {/* ── BODY TEXT ── */}
+          {/* ── BODY TEXT with shiny teal highlight ── */}
           <div style={{
-            margin:'8px 28px 0 28px',
-            padding:'14px 22px',
-            background:'linear-gradient(135deg, rgba(13,148,136,0.04) 0%, rgba(240,253,250,0.8) 50%, rgba(13,148,136,0.04) 100%)',
-            borderLeft:'3px solid #0d9488',
-            borderRight:'3px solid #0d9488',
-            borderRadius:'4px',
-            position:'relative',
+            margin: '6px 35px 0 35px',
+            padding: '20px 28px',
+            background: 'linear-gradient(135deg, #e6f7f5 0%, #f0fdf9 25%, #e6f7f5 50%, #f0fdf9 75%, #e6f7f5 100%)',
+            borderLeft: '5px solid #0d9488',
+            borderRight: '5px solid #0d9488',
+            borderTop: '2px solid #14b8a6',
+            borderBottom: '2px solid #14b8a6',
+            borderRadius: '4px',
+            position: 'relative',
+            boxShadow: 'inset 0 0 20px rgba(13,148,136,0.08)',
           }}>
-            {/* Decorative quote marks */}
+            {/* Teal accent corners */}
             <div style={{
-              position:'absolute', top:'-12px', left:'18px',
-              fontSize:'60px', lineHeight:1, color:'#0d9488', opacity:0.12,
-              fontFamily:'Georgia, serif', fontWeight:'bold',
+              position: 'absolute', top: '-2px', left: '-2px',
+              width: '20px', height: '20px',
+              borderTop: '3px solid #0d9488',
+              borderLeft: '3px solid #0d9488',
+              borderRadius: '4px 0 0 0',
+            }}/>
+            <div style={{
+              position: 'absolute', top: '-2px', right: '-2px',
+              width: '20px', height: '20px',
+              borderTop: '3px solid #0d9488',
+              borderRight: '3px solid #0d9488',
+              borderRadius: '0 4px 0 0',
+            }}/>
+            <div style={{
+              position: 'absolute', bottom: '-2px', left: '-2px',
+              width: '20px', height: '20px',
+              borderBottom: '3px solid #0d9488',
+              borderLeft: '3px solid #0d9488',
+              borderRadius: '0 0 0 4px',
+            }}/>
+            <div style={{
+              position: 'absolute', bottom: '-2px', right: '-2px',
+              width: '20px', height: '20px',
+              borderBottom: '3px solid #0d9488',
+              borderRight: '3px solid #0d9488',
+              borderRadius: '0 0 4px 0',
+            }}/>
+
+            {/* Quote marks in teal */}
+            <div style={{
+              position: 'absolute', top: '-4px', left: '24px',
+              fontSize: '48px', lineHeight: 1, color: '#0d9488',
+              fontFamily: 'Georgia, serif', fontWeight: 'bold',
             }}>"</div>
             <div style={{
-              position:'absolute', bottom:'-28px', right:'18px',
-              fontSize:'60px', lineHeight:1, color:'#0d9488', opacity:0.12,
-              fontFamily:'Georgia, serif', fontWeight:'bold',
+              position: 'absolute', bottom: '-16px', right: '24px',
+              fontSize: '48px', lineHeight: 1, color: '#0d9488',
+              fontFamily: 'Georgia, serif', fontWeight: 'bold',
             }}>"</div>
+
             <p style={{
-              fontSize:'16px',
-              lineHeight:'1.9',
-              color:'#0a2622',
-              margin:0,
-              textAlign:'justify',
-              textIndent:'40px',
-              fontFamily:"'Cormorant Garamond', serif",
-              fontWeight:'700',
-              letterSpacing:'0.4px',
+              fontSize: '15.5px',
+              lineHeight: 2,
+              color: '#0a4f47',
+              margin: 0,
+              textAlign: 'justify',
+              textIndent: '44px',
+              fontFamily: "'Cormorant Garamond', serif",
+              fontWeight: 700,
+              letterSpacing: '0.3px',
             }}>
               This certificate is presented in recognition of your valuable contribution and dedicated efforts in the successful conduct of the Secondary School Certificate Examination, February‑March 2026, organized by the Maharashtra State Board of Secondary and Higher Secondary Education. Your diligence, discipline, and commitment are highly commendable.
             </p>
           </div>
 
           {/* ── BOTTOM DIVIDER ── */}
-          <div style={{ position:'relative', margin:'auto 0 4px 0', paddingTop:'14px', height:'14px', display:'flex', alignItems:'center', justifyContent:'center' }}>
-            <div style={{ position:'absolute', left:0, right:0, height:'1px', background:'linear-gradient(90deg, transparent 0%, #0d9488 15%, #14b8a6 50%, #0d9488 85%, transparent 100%)' }}/>
-            <div style={{ position:'relative', zIndex:1, display:'flex', gap:'5px', alignItems:'center' }}>
-              {[-2,-1,0,1,2].map(i => (
-                <div key={i} style={{ width: i === 0 ? '6px' : '4px', height: i === 0 ? '6px' : '4px', borderRadius:'50%', background:'#0d9488', opacity: 1 - Math.abs(i)*0.2 }}/>
-              ))}
-            </div>
+          <div style={{ display: 'flex', justifyContent: 'center', margin: 'auto 0 10px 0', paddingTop: '18px' }}>
+            <ElegantDivider width={480} />
           </div>
 
           {/* ── BOTTOM SECTION ── */}
           <div style={{
-            display:'flex',
-            justifyContent:'space-between',
-            alignItems:'flex-end',
-            paddingBottom:'10px',
-            marginTop:'6px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-end',
+            paddingBottom: '14px',
+            marginTop: '6px',
           }}>
             {/* Date */}
-            <div style={{ textAlign:'left' }}>
+            <div style={{ textAlign: 'left' }}>
               <div style={{
-                fontSize:'12px',
-                fontWeight:'700',
-                letterSpacing:'5px',
-                color:'#14b8a6',
-                fontFamily:"'Cinzel', serif",
-                textTransform:'uppercase',
-                marginBottom:'4px',
-                opacity:0.95,
+                fontSize: '10px',
+                fontWeight: 700,
+                letterSpacing: '5px',
+                color: '#c9a227',
+                fontFamily: "'Cinzel', serif",
+                textTransform: 'uppercase',
+                marginBottom: '4px',
               }}>
                 Date
               </div>
               <div style={{
-                fontSize:'17px',
-                color:'#0a4f47',
-                fontWeight:'700',
-                fontFamily:"serif",
-                paddingBottom:'3px',
-                borderBottom:'2px solid #0d9488',
-                letterSpacing:'0.5px',
-                minWidth:'120px',
+                fontSize: '15px',
+                color: '#0a4f47',
+                fontWeight: 700,
+                fontFamily: 'serif',
+                paddingBottom: '4px',
+                borderBottom: '2px solid #0d9488',
+                letterSpacing: '0.5px',
+                minWidth: '115px',
               }}>
                 {date}
               </div>
             </div>
 
-            {/* Center seal-like motif */}
-            <div style={{ textAlign:'center', opacity:0.6 }}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="55" height="55" viewBox="0 0 60 60">
-                {[0,30,60,90,120,150,180,210,240,270,300,330].map(a => (
-                  <ellipse key={a} cx="30" cy="10" rx="4" ry="10" fill="#0d9488" transform={`rotate(${a},30,30)`} opacity="0.6"/>
-                ))}
-                <circle cx="30" cy="30" r="16" fill="#f0fdfa" stroke="#0d9488" strokeWidth="1.5"/>
-                <circle cx="30" cy="30" r="10" fill="#0d9488" opacity="0.8"/>
-                <circle cx="30" cy="30" r="5" fill="#f0fdfa"/>
-              </svg>
+            {/* Center seal */}
+            <div style={{ textAlign: 'center' }}>
+              <OfficialSeal />
             </div>
 
             {/* Signature block */}
-            <div style={{ textAlign:'center', minWidth:'220px' }}>
+            <div style={{ textAlign: 'center', minWidth: '215px' }}>
               <img
                 src="/signature.png"
                 alt="Signature"
-                style={{ height:'52px', objectFit:'contain', display:'block', margin:'0 auto 4px auto' }}
+                style={{ height: '46px', objectFit: 'contain', display: 'block', margin: '0 auto 4px auto' }}
                 crossOrigin="anonymous"
                 onError={(e) => { (e.target as HTMLImageElement).src = SIGNATURE_FALLBACK; }}
               />
-              <div style={{ width:'220px', height:'1.5px', background:'linear-gradient(90deg, transparent, #0d9488, transparent)', margin:'0 auto 5px auto' }}/>
+              <div style={{ width: '215px', height: '2px', background: 'linear-gradient(90deg, transparent, #c9a227, transparent)', margin: '0 auto 5px auto' }}/>
               <div style={{
-                fontSize:'12px',
-                fontWeight:'700',
-                letterSpacing:'5px',
-                color:'#14b8a6',
-                fontFamily:"'Cinzel', serif",
-                textTransform:'uppercase',
-                marginBottom:'3px',
-                opacity:0.95,
+                fontSize: '10px',
+                fontWeight: 700,
+                letterSpacing: '5px',
+                color: '#c9a227',
+                fontFamily: "'Cinzel', serif",
+                textTransform: 'uppercase',
+                marginBottom: '3px',
               }}>
                 Chief Conductor
               </div>
               <div style={{
-                fontSize:'18px',
-                color:'#0a4f47',
-                fontWeight:'800',
-                fontFamily:"'Playfair Display', serif",
-                margin:'0 0 3px 0',
-                letterSpacing:'0.3px',
+                fontSize: '16px',
+                color: '#0a4f47',
+                fontWeight: 800,
+                fontFamily: "'Playfair Display', serif",
+                margin: '0 0 3px 0',
+                letterSpacing: '0.3px',
               }}>
                 Mr. Dinesh Dayaram Yadav
               </div>
               <div style={{
-                fontSize:'11px',
-                color:'#1a2e2b',
-                fontFamily:"serif",
-                fontWeight:'700',
-                margin:'0 0 2px 0',
-                letterSpacing:'0.4px',
+                fontSize: '10px',
+                color: '#1a2e2b',
+                fontFamily: 'serif',
+                fontWeight: 700,
+                margin: '0 0 2px 0',
+                letterSpacing: '0.4px',
               }}>
                 Centre No 6118
               </div>
               <div style={{
-                fontSize:'12.5px',
-                color:'#1a2e2b',
-                fontFamily:"serif",
-                fontWeight:'700',
-                margin:0,
-                letterSpacing:'0.3px',
+                fontSize: '11.5px',
+                color: '#1a2e2b',
+                fontFamily: 'serif',
+                fontWeight: 700,
+                margin: 0,
+                letterSpacing: '0.2px',
               }}>
                 St. Agrasen High School Kalwa East Thane 400605
               </div>
             </div>
           </div>
 
-        </div>{/* end main content */}
+        </div>
       </div>
     );
   }
